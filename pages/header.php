@@ -296,7 +296,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     <a herf="#"><i class="fa fa-users fa-fw"></i> Users<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
-                                            <a href="#"><i class="fa fa-user-circle-o fa-fw"></i> Manage Users</a>
+                                            <a href="/manageUsers/index.php"><i class="fa fa-user-circle-o fa-fw"></i> Manage Users</a>
                                         </li>
                                         <li>
                                             <a href="#"><i class="fa fa-tag fa-fw"></i> Citation</a>
