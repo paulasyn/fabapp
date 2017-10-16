@@ -6,6 +6,7 @@
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 ?>
 <title><?php echo $sv['User Management'];?> FabApp - User Management</title>
+<body>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-12">
@@ -32,7 +33,7 @@ include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
                     <i class="fa fa-ticket fa-fw"></i> Create New Users
                 </div>
                 <div class="panel-body">
-                    Links for Creating a new User?
+                    <a href="/manageUsers/createUser.php" echo $sv["forgotten"];?>Create a new User</a>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -43,6 +44,7 @@ include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
     <!-- /.row -->
 </div>
 <!-- /#page-wrapper -->
+</body>
 <?php
 //Standard call for dependencies
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');

@@ -6,41 +6,82 @@
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 ?>
 <title><?php echo $sv['site_name'];?> Base</title>
+
 <div id="page-wrapper">
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="page-header">Page Name</h1>
-        </div>
-        <!-- /.col-md-12 -->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Create User</h1>
     </div>
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-ticket fa-fw"></i> Title
-                </div>
-                <div class="panel-body">
-                    
-                </div>
-            </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-10">
+        <div class="alert alert-danger" role = "alert" id="errordiv" style="display:none;">
+            <p id="errormessage"></p>
         </div>
-        <!-- /.col-md-8 -->
-        <div class="col-lg-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-calculator fa-fw"></i> Col 4
-                </div>
-                <div class="panel-body">
-                    
-                </div>
-                <!-- /.panel-body -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-ticket fa-fw"></i> New User Information
             </div>
-            <!-- /.panel -->
+            <form name="newUserForm" method= "POST"  action="" onsubmit="return insertNewUser();">
+
+                <table class="table table-striped">
+                    <tr>
+                        <td>First Name</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="firstName" class="form-control" id="firstName" placeholder="Enter first name">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Last Name</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="lastName" class="form-control" id="lastName" placeholder="Enter last name">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Address</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="address" class="form-control" id="address" placeholder="Enter address">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Email</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="email" class="form-control" id="email" placeholder="Enter email">
+                        </td>
+                    </tr>
+
+                  
+                  
+               
+                    <tr>
+                        <td>Staff ID</td>
+                        <td><?php echo $staff->getOperator();?></td>
+                    </tr>
+                    <tr>
+                        <td>Current Date</td>
+                        <td><?php echo $date = date("m/d/Y h:i a", time());?></td>
+                    </tr>
+                    <tr>
+                        <td><input class="btn btn-primary pull-right" type="reset"
+                            value="Reset"></td>
+                        <td><input class="btn btn-primary" type="submit" value="Submit"></td>
+                    </tr>
+                </table>
+            </form>
         </div>
-        <!-- /.col-md-4 -->
     </div>
-    <!-- /.row -->
+</div>
+<!-- /.col-lg-8 -->
+</div>
 </div>
 <!-- /#page-wrapper -->
 <?php
