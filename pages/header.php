@@ -299,7 +299,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                             <a href="/manageUsers/index.php"><i class="fa fa-user-circle-o fa-fw"></i> Manage Users</a>
                                         </li>
                                         <li>
-                                            <a href="#"><i class="fa fa-tag fa-fw"></i> Citation</a>
+                                            <a href="/manageCitations/createCitation.php"><i class="fa fa-tag fa-fw"></i> Citation</a>
                                         </li>
                                     </ul>
                                 </li>
