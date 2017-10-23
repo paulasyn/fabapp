@@ -5,7 +5,7 @@
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 ?>
-<title><?php echo $sv['site_name'];?> Base</title>
+<title><?php echo $sv['User Registration'];?> Base</title>
 
 <div id="page-wrapper">
 <div class="row">
@@ -24,9 +24,18 @@ include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
             <div class="panel-heading">
                 <i class="fa fa-ticket fa-fw"></i> New User Information
             </div>
-            <form name="newUserForm" method= "POST"  action="" onsubmit="return insertNewUser();">
+            <form name="newUserForm" method= "POST"  action="/manageUsers/createUserSuccess.php" onsubmit="return insertNewUser();">
 
                 <table class="table table-striped">
+                    <tr>
+                        <td>User ID</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="userId" class="form-control" name="u_id" id="firstName" placeholder="Enter first name">
+                        </td>
+                    </tr>
+                    
+                    
                     <tr>
                         <td>First Name</td>
                         <td>
@@ -59,12 +68,17 @@ include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
                         </td>
                     </tr>
 
-                  
+                        <td>Password</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="password" class="form-control" id="password">
+
+             
                   
                
                     <tr>
                         <td>Staff ID</td>
-                        <td><?php echo $staff->getOperator();?></td>
+                        <td>Default will be put here</td>
                     </tr>
                     <tr>
                         <td>Current Date</td>
@@ -73,7 +87,17 @@ include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
                     <tr>
                         <td><input class="btn btn-primary pull-right" type="reset"
                             value="Reset"></td>
-                        <td><input class="btn btn-primary" type="submit" value="Submit"></td>
+                        <td><input class="btn btn-primary" type="submit" name="submit" value="Submit">
+                        <!-- Insert Query Here -->
+                        <?php>
+                        
+
+
+                        
+                        
+                        
+                        <?>
+                        </td>
                     </tr>
                 </table>
             </form>
