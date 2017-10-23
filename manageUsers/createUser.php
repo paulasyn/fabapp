@@ -89,14 +89,14 @@ include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
                             value="Reset"></td>
                         <td><input class="btn btn-primary" type="submit" name="submit" value="Submit">
                         <!-- Insert Query Here -->
-                        <?php>
+                        <?php
                         
 
 
                         
                         
                         
-                        <?>
+                        ?>
                         </td>
                     </tr>
                 </table>
