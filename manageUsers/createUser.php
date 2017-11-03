@@ -5,7 +5,9 @@
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 ?>
-<title><?php echo $sv['User Registration'];?> Base</title>
+<title><?php echo $sv['site_name'];?> User Registration</title>
+
+echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, than I figured out how to make a popup.', false)}</script>";
 
 <div id="page-wrapper">
 <div class="row">

@@ -5,7 +5,10 @@
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 ?>
-<title><?php echo $sv['User Management'];?> FabApp - User Management</title>
+<title><?php echo $sv['site_name'];?> User Management</title>
+
+echo "<script type='text/javascript'> window.onload = function(){goModal('Welcome','Welcome to the user management page.', true)}</script>";
+
 <body>
 <div id="page-wrapper">
     <div class="row">
