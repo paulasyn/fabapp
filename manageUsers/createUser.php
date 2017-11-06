@@ -24,55 +24,48 @@ include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
             <div class="panel-heading">
                 <i class="fa fa-ticket fa-fw"></i> New User Information
             </div>
-            <form name="newUserForm" method= "POST"  action="/manageUsers/createUserSuccess.php" onsubmit="return insertNewUser();">
+            <form name="newUserForm" method= "POST"  action="/manageUsers/CreateSuccess2.php"> <!--onsubmit="return insertNewUser();"-->
 
                 <table class="table table-striped">
                     <tr>
-                        <td>User ID</td>
+                        <td>Role ID</td>
                         <td>
                             <div class="form-group">
-                            <input type="userId" class="form-control" name="u_id" id="firstName" placeholder="Enter first name">
+                            <input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID">
                         </td>
                     </tr>
                     
                     
                     <tr>
-                        <td>First Name</td>
+                        <td>1000's Number</td>
                         <td>
                             <div class="form-group">
-                            <input type="firstName" class="form-control" id="firstName" placeholder="Enter first name">
+                            <input type="text" class = "form-control" name="operator" placeholder="Enter 1000s Number">
+                        </td>
+                    </tr>                    
+                    
+					<tr>
+                        <td>Icon</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="text" class = "form-control" name="icon">
                         </td>
                     </tr>
 
-                    <tr>
-                        <td>Last Name</td>
+					<tr>
+                        <td>Notes</td>
                         <td>
                             <div class="form-group">
-                            <input type="lastName" class="form-control" id="lastName" placeholder="Enter last name">
+                            <input type="text" class = "form-control" name="notes" placeholder="Notes">
                         </td>
                     </tr>
 
-                    <tr>
-                        <td>Address</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="address" class="form-control" id="address" placeholder="Enter address">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Email</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="email" class="form-control" id="email" placeholder="Enter email">
-                        </td>
-                    </tr>
-
-                              
+             
+                  
                
                     <tr>
-                        <td>Staff ID</td>
-                        <td>Default will be put here</td>
+                        <td>Created By</td>
+                        <td> <?php echo $staff->getOperator();?></td>
                     </tr>
                     <tr>
                         <td>Current Date</td>

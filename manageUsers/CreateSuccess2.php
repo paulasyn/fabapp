@@ -43,34 +43,3 @@ if (isset($_POST['submit'])){
 	header("Location: ../index.php");
 	exit();
 }
-?>
-
-<title><?php echo $sv['User Registration'];?> Base</title>
-<div id="page-wrapper">
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="page-header">User Created</h1>
-        </div>
-        <!-- /.col-md-12 -->
-    </div>
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-ticket fa-fw"></i> New User Successfully Created
-                </div>
-                <div class="panel-body">
-                    
-                </div>
-            </div>
-        </div>
-        <!-- /.col-md-8 -->
-    </div>
-    <!-- /.row -->
-</div>
-<!-- /#page-wrapper -->
-<?php
-//Standard call for dependencies
-include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
-?>

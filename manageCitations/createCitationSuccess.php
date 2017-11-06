@@ -4,11 +4,6 @@
  *   FabApp V 0.9
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
-if (!$staff || $staff->getRoleID() < 7){
-    //Not Authorized to see this Page
-    header('Location: index.php');
-	exit();
-}
 ?>
 <title><?php echo $sv['Citation Creation'];?> Create Citation</title>
 
@@ -35,7 +30,20 @@ if (!$staff || $staff->getRoleID() < 7){
                     <tr>
                         <td>User ID</td>
                         <td>
-                            <input type="text" class = "form-control" name="id" placeholder="Enter user ID">
+                        <select class="form-control" name="devGrp" id="devGrp" onChange="change_group()" >
+                            <option value="" > Select User</option>
+                            <!-- <?php
+                                if (! $result = $mysqli->query ( "SELECT * FROM `users`" )) {
+                                    die("There was an error loading device_group ");
+                                }
+                                
+                                while ( $rows = mysqli_fetch_array ( $result ) ) {
+                                    $public_devices = $mysqli->query ( "SELECT * FROM `users`");
+                                    if($public_devices->num_rows > 0)
+                                        echo "<option value=" . $rows ['dg_id'] . ">" . $rows ['dg_desc'] . "</option>";
+                                }
+                                ?>  -->
+                        </select>
                     </td>
                     </tr>
 
@@ -43,7 +51,7 @@ if (!$staff || $staff->getRoleID() < 7){
                         <td>Issued By</td>
                         <td>
                         
-                        <?php echo $staff->getOperator();?>
+                        Gets current user ID
                         </td>
                     </tr>
 
