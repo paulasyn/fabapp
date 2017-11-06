@@ -5,7 +5,10 @@
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
 ?>
-<title><?php echo $sv['Citation Creation'];?> Create Citation</title>
+<title><?php echo $sv['site_name'];?> Create Citation</title>
+
+echo "<script type='text/javascript'> window.onload = function(){goModal('Create Citation','This is the page to create a citation.', true)}</script>";
+echo "<script type='text/javascript'> window.onload = function(){goModal('Test','This is a test for creating multiple popups.', true)}</script>";
 
 <div id="page-wrapper">
 <div class="row">
