@@ -4,6 +4,10 @@
  *   FabApp V 0.9
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
+
+
+
+
 ?>
 <title><?php echo $sv['site_name'];?> User Management</title>
 
@@ -24,30 +28,24 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Welcom
                 <div class="panel-heading">
                     <i class="fa fa-ticket fa-fw"></i> Manage Users
                 </div>
-                <div class="panel-body">
-                    Possibly list all users?     
+                <div class="panel-body">    
                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
                     <tr>
-                        <th>Code</th>
-                        <th>NIT</th>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Type</th>
+                        <th>Icon</th>
+                        <th>UserID</th>
+                      
                     </tr>
                     </thead>
                     <?php
-                    $conn = mysqli_connect('localhost', 'user', 'password', 'db');
-                    $result = mysqli_query($conn, 'call myStoredProcedure') or die('Query fail: ' . mysqli_error());
+
+                    $result = $mysqli->query ("SELECT `operator`, `icon` FROM `users` WHERE 1 ORDER BY `operator` ASC") or die("Bad Query: $result");
                     ?>
                     <tbody>
                     <?php while ($row = mysqli_fetch_array($result)) { ?>
                         <tr>
-                            <td><?php echo $row[0]; ?></td>
-                            <td><?php echo $row[1]; ?></td>
-                            <td><?php echo $row[2]; ?></td>
-                            <td><?php echo $row[3]; ?></td>
-                            <td><?php echo $row[4]; ?></td>
+                            <td><?php echo $row['icon']; ?></td>
+                            <td><?php echo $row['operator']; ?></td>
                         </tr>
                     <?php } ?>
                     </tbody>
