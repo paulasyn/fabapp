@@ -11,9 +11,7 @@ if (!$staff || $staff->getRoleID() < 7){
 ?>
 
 <title><?php echo $sv['site_name'];?> User Registration</title>
-
-echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, than I figured out how to make a popup.', false)}</script>";
-
+<!--echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, then I figured out how to make a popup.', false)}</script>";-->
 <div id="page-wrapper">
 <div class="row">
     <div class="col-lg-12">
@@ -36,11 +34,11 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Did th
                     <label class="pull-right"><input type="radio" name="optradio" value="1" style="margin-right:10px">Off Campus User</label>
          
             </div>
-            <form name="newUserForm" method= "POST"  action="/manageUsers/CreateSuccess2.php"> <!--onsubmit="return insertNewUser();"-->
+            <form name="newUserForm" method= "POST"> <!--onsubmit="return insertNewUser();"-->
 
                 <table class="table table-striped">
                     <tr>
-                        <td>Role ID</td>
+                        <td>Role ID<a title = "Required">*</a></td>
                         <td>
                             <div class="form-group">
                             <input type="int" class = "form-control" name="r_id" placeholder="1" default="1">
@@ -49,7 +47,7 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Did th
                     
                     
                     <tr>
-                        <td>Mav ID</td>
+                        <td>1000's Number<a title = "Required">*</a></td>
                         <td>
                             <div class="form-group">
                             <input type="text" class = "form-control" name="operator" placeholder="Enter 1000s Number">
@@ -65,59 +63,8 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Did th
                         </td>
                     </tr>
 
-                    
-                    <tr>
-                        <td>First Name</td>
-                        <td> 
-                            <input type="text" class = "form-control" name="fname" >
-                        </td>
-                    </tr>
-                
-                    <tr>
-                        <td>Last Name</td>
-                        <td> 
-                            <input type="text" class = "form-control" name="lname" >
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Email</td>
-                        <td> 
-                            <input type="text" class = "form-control" name="email" >
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Street Address</td>
-                        <td> 
-                            <input type="text" class = "form-control" name="address" >
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>City</td>
-                        <td> 
-                            <input type="text" class = "form-control" name="city" >
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>State</td>
-                        <td> 
-                            <input type="text" class = "form-control" name="state" >
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Zipcode</td>
-                        <td> 
-                            <input type="text" class = "form-control" name="zip" >
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Notes</td>
+					<tr>
+                        <td>Notes<a title = "Required">*</a></td>
                         <td>
                             <div class="form-group">
                             <input type="text" class = "form-control" name="notes" placeholder="Notes">
@@ -140,12 +87,51 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Did th
                         <td><input class="btn btn-primary" type="submit" name="submit" value="Submit">
                         <!-- Insert Query Here -->
                         <?php
-                        
+						
+						if (isset($_POST['submit'])){
+	
+							$r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
+							$operator = mysqli_real_escape_string($mysqli, $_POST['operator']);
+							$icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
+							$notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
+	
+							# Error handling
+							if(empty($r_id)||empty($operator)||empty($notes)){
+								$_SESSION['CUmsg'] = "Empty";
+								header("Location: ../manageUsers/createUser.php");
+								exit();
+							}else{
+								#Discuss other inputs with Jon, default expecting specific characters
+								if(!preg_match("/^[0-9]*$/", $r_id)||
+								!preg_match("/^[0-9]*$/", $operator)||!preg_match("/^[a-zA-Z]*$/", $icon)){
+									$_SESSION['CUmsg'] = "Field";
+									header("Location: ../manageUsers/createUser.php");
+									exit();
+								}else{
+									#Make sure you're not entering a user with a repat 1000s number
+									$sql = "SELECT * FROM users WHERE operator = '$operator'";
+									$result = mysqli_query($mysqli, $sql);
+									$resultCheck = mysqli_num_rows($result);
+									
+									if($resultCheck>0){ 
+										#if it's a repeat 1000s number, return to create user page with error message
+										$_SESSION['CUmsg'] = "Exists";
+										header("Location: ../manageUsers/createUser.php");
+										exit();
+									}else {
+										#else, add the user and return to create user page.
+										$sql = "INSERT INTO users (operator, r_id, icon, notes) VALUES ('$operator', 
+										'$r_id', '$icon', '$notes');";
+										mysqli_query($mysqli, $sql);
+										$_SESSION['CUmsg'] = "Success";
+										header("Location: ../manageUsers/createUser.php");
+										exit();
+									}
+								}
+							}
+							
+						} 
 
-
-                        
-                        
-                        
                         ?>
                         </td>
                     </tr>
