@@ -35,11 +35,13 @@ if(isset($_SESSION['CUmsg'])){
     <!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
+<a href="/manageUsers/index.php"><i class="fa fa-user-circle-o fa-fw"></i> Return to User Homepage</a>
 <div class="row">
     <div class="col-lg-10">
         <div class="alert alert-danger" role = "alert" id="errordiv" style="display:none;">
             <p id="errormessage"></p>
         </div>
+        
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-ticket fa-fw"></i> New User Information
