@@ -4,12 +4,22 @@
  *   FabApp V 0.9
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
-if (!$staff || $staff->getRoleID() < 7){
-    //Not Authorized to see this Page
-    header('Location: /index.php');
-	exit();
+/* Check for error from a previously submitted add user form.*/
+if(isset($_SESSION['CUmsg'])){
+	/* Handle appropriately*/
+	if($_SESSION['CUmsg'] == "Success"){ #User added successfully
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully added.', false)}</script>";
+	} elseif($_SESSION['CUmsg'] == "Exists"){#Role ID already exists
+		echo "<script type='text/javascript'> window.onload = function(){goModal('User Already Exists','The user you attempted to add has a 1000s number already in the database.', false)}</script>";
+	} elseif($_SESSION['CUmsg'] == "Field"){#Field has invalid characters
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Symbol Error','Invalid symbols detected, make sure you are entering valid inputs.', false)}</script>";
+	} elseif($_SESSION['CUmsg'] == "Empty"){#Required field left empty
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Empty Field','Make sure to complete all required fields.', false)}</script>";
+	}
+	/*Unset the error value in case of refresh.*/
+	unset($_SESSION['CUmsg']);
+}
 ?>
-
 <title><?php echo $sv['site_name'];?> User Registration</title>
 <!--echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, then I figured out how to make a popup.', false)}</script>";-->
 <div id="page-wrapper">
@@ -28,11 +38,6 @@ if (!$staff || $staff->getRoleID() < 7){
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-ticket fa-fw"></i> New User Information
-                
-                    <label class="pull-right"><input type="radio" name="optradio" value="0" style="margin-right:10px">On Campus User</label>
-
-                    <label class="pull-right"><input type="radio" name="optradio" value="1" style="margin-right:10px">Off Campus User</label>
-         
             </div>
             <form name="newUserForm" method= "POST"> <!--onsubmit="return insertNewUser();"-->
 
@@ -41,7 +46,7 @@ if (!$staff || $staff->getRoleID() < 7){
                         <td>Role ID<a title = "Required">*</a></td>
                         <td>
                             <div class="form-group">
-                            <input type="int" class = "form-control" name="r_id" placeholder="1" default="1">
+                            <input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID">
                         </td>
                     </tr>
                     
@@ -52,8 +57,7 @@ if (!$staff || $staff->getRoleID() < 7){
                             <div class="form-group">
                             <input type="text" class = "form-control" name="operator" placeholder="Enter 1000s Number">
                         </td>
-                    </tr>    
-                    
+                    </tr>                    
                     
 					<tr>
                         <td>Icon</td>
@@ -71,16 +75,17 @@ if (!$staff || $staff->getRoleID() < 7){
                         </td>
                     </tr>
 
+             
+                  
+               
                     <tr>
                         <td>Created By</td>
                         <td> <?php echo $staff->getOperator();?></td>
                     </tr>
-
                     <tr>
                         <td>Current Date</td>
                         <td><?php echo $date = date("m/d/Y h:i a", time());?></td>
                     </tr>
-
                     <tr>
                         <td><input class="btn btn-primary pull-right" type="reset"
                             value="Reset"></td>
