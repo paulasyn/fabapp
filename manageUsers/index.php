@@ -4,10 +4,6 @@
  *   FabApp V 0.9
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
-
-
-
-
 ?>
 <title><?php echo $sv['site_name'];?> User Management</title>
 
@@ -34,11 +30,9 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Welcom
                     <tr>
                         <th>Icon</th>
                         <th>UserID</th>
-                      
                     </tr>
                     </thead>
                     <?php
-
                     $result = $mysqli->query ("SELECT `operator`, `icon` FROM `users` WHERE 1 ORDER BY `operator` ASC") or die("Bad Query: $result");
                     ?>
                     <tbody>
