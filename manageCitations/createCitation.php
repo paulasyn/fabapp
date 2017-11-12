@@ -9,11 +9,24 @@ if (!$staff || $staff->getRoleID() < 7){
     header('Location: /index.php');
 	exit();
 }
+if(isset($_SESSION['CCmsg'])){
+/* Handle appropriately*/
+	if($_SESSION['CCmsg'] == "Success"){ #User added successfully
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully added.', false)}</script>";
+	} elseif($_SESSION['CCmsg'] == "Field"){#Field has invalid characters
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Symbol Error','Invalid symbols detected, make sure you are entering valid inputs.', false)}</script>";
+	} elseif($_SESSION['CCmsg'] == "Empty"){#Required field left empty
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Empty Field','Make sure to complete all required fields.', false)}</script>";
+	}
+/*Unset the error value in case of refresh.*/
+unset($_SESSION['CCmsg']);
+}
+
 ?>
 <title><?php echo $sv['site_name'];?> Create Citation</title>
 
-echo "<script type='text/javascript'> window.onload = function(){goModal('Create Citation','This is the page to create a citation.', true)}</script>";
-echo "<script type='text/javascript'> window.onload = function(){goModal('Test','This is a test for creating multiple popups.', true)}</script>";
+<!--echo "<script type='text/javascript'> window.onload = function(){goModal('Create Citation','This is the page to create a citation.', true)}</script>";
+echo "<script type='text/javascript'> window.onload = function(){goModal('Test','This is a test for creating multiple popups.', true)}</script>";-->
 
 <div id="page-wrapper">
 <div class="row">
@@ -32,13 +45,13 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Test',
             <div class="panel-heading">
                 <i class="fa fa-ticket fa-fw"></i> Citation
             </div>
-            <form name="newUserForm" method= "POST"  action="/manageUsers/createUserSuccess.php" onsubmit="return insertNewUser();">
+            <form name="newCitationForm" method= "POST">
 
                 <table class="table table-striped">
                     <tr>
-                        <td>User ID</td>
+                        <td>User ID<a title = "Required">*</a></td>
                         <td>
-                            <input type="text" class = "form-control" name="id" placeholder="Enter user ID">
+                            <input type="text" class = "form-control" name="user_id" placeholder="Enter user ID">
                     </td>
                     </tr>
 
@@ -51,7 +64,7 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Test',
                     </tr>
 
                     <tr>
-                        <td>Citation</td>
+                        <td>Citation<a title = "Required">*</a></td>
                         <td>
                         <div class="form-group">
                             <textarea class="form-control" id="notes" rows="5" name="notes"
@@ -70,12 +83,35 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Test',
                         <td><input class="btn btn-primary" type="submit" name="submit" value="Submit">
                         <!-- Insert Query Here -->
                         <?php
-                        
+                        if (isset($_POST['submit'])){
+	
+							$staff_id = mysqli_real_escape_string($mysqli, $staff->getOperator());
+							$operator = mysqli_real_escape_string($mysqli, $_POST['user_id']);
+							$notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
+							$sqldate = date("Y-m-d H:i:s", time());
+							# Error handling
+							if(empty($operator)||empty($notes)){
+								$_SESSION['CCmsg'] = "Empty";
+								header("Location: ../manageCitations/createCitation.php");
+								exit();
+							}else{
+								#Discuss other inputs with Jon, default expecting specific characters
+								if(!preg_match("/^[0-9]*$/", $staff_id)||
+								!preg_match("/^[0-9]*$/", $operator)){
+									$_SESSION['CCmsg'] = "Field";
+									header("Location: ../manageCitations/createCitation.php");
+									exit();
+								}else{
+									$sql = "INSERT INTO citation (staff_id, operator, c_date, c_notes) VALUES ('$staff_id', 
+									'$operator', '$sqldate', '$notes');";
+									mysqli_query($mysqli, $sql);
+									$_SESSION['CCmsg'] = "Success";
+									header("Location: ../manageCitations/createCitation.php");
+									exit();
+								}
+							}
+						}
 
-
-                        
-                        
-                        
                         ?>
                         </td>
                     </tr>
