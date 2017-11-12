@@ -4,6 +4,10 @@
  *   FabApp V 0.9
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
+
+
+
+
 ?>
 <title><?php echo $sv['site_name'];?> User Management</title>
 
@@ -24,8 +28,28 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Welcom
                 <div class="panel-heading">
                     <i class="fa fa-ticket fa-fw"></i> Manage Users
                 </div>
-                <div class="panel-body">
-                    Possibly list all users?                   
+                <div class="panel-body">    
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <thead>
+                    <tr>
+                        <th>Icon</th>
+                        <th>UserID</th>
+                      
+                    </tr>
+                    </thead>
+                    <?php
+
+                    $result = $mysqli->query ("SELECT `operator`, `icon` FROM `users` WHERE 1 ORDER BY `operator` ASC") or die("Bad Query: $result");
+                    ?>
+                    <tbody>
+                    <?php while ($row = mysqli_fetch_array($result)) { ?>
+                        <tr>
+                            <td><?php echo $row['icon']; ?></td>
+                            <td><?php echo $row['operator']; ?></td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>              
                 </div>
             </div>
         </div>
