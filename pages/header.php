@@ -304,14 +304,11 @@ if (isset($_SESSION['success_msg']) && $_SESSION['success_msg']!= ""){
                                     <a herf="#"><i class="fa fa-users fa-fw"></i> Users<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
-<<<<<<< HEAD
                                             <a href="/admin/addrfid.php"><i class="fa fa-feed fa-fw"></i> Add RFID</a>
                                         </li>
                                         <li>
-                                            <a href="#"><i class="fa fa-user-circle-o fa-fw"></i> Manage Users</a>
-=======
+                                            
                                             <a href="/manageUsers/index.php"><i class="fa fa-user-circle-o fa-fw"></i> Manage Users</a>
->>>>>>> development
                                         </li>
                                         <li>
                                             <a href="/manageCitations/createCitation.php"><i class="fa fa-tag fa-fw"></i> Citation</a>
