@@ -10,20 +10,20 @@ if (!$staff || $staff->getRoleID() < 7){
 	exit();
 }
 /* Check for error from a previously submitted add user form.*/
-if(isset($_SESSION['CUmsg'])){
-	/* Handle appropriately*/
-	if($_SESSION['CUmsg'] == "Success"){ #User added successfully
-		echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully added.', false)}</script>";
-	} elseif($_SESSION['CUmsg'] == "Exists"){#Role ID already exists
-		echo "<script type='text/javascript'> window.onload = function(){goModal('User Already Exists','The user you attempted to add has a 1000s number already in the database.', false)}</script>";
-	} elseif($_SESSION['CUmsg'] == "Field"){#Field has invalid characters
-		echo "<script type='text/javascript'> window.onload = function(){goModal('Symbol Error','Invalid symbols detected, make sure you are entering valid inputs.', false)}</script>";
-	} elseif($_SESSION['CUmsg'] == "Empty"){#Required field left empty
-		echo "<script type='text/javascript'> window.onload = function(){goModal('Empty Field','Make sure to complete all required fields.', false)}</script>";
-	}
-	/*Unset the error value in case of refresh.*/
-	unset($_SESSION['CUmsg']);
+if(isset($_SESSION['popup'])){
+    /* Handle appropriately*/
+    if($_SESSION['popup'] == "Success"){ # User added successfully
+        echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully added.', false)}</script>";
+    } elseif($_SESSION['popup'] == ""){# Check if the pop up message is empty. This only happens if the submit button was hit but nothing was added for the pop up message. This is unexpected behavior.
+        echo "<script type='text/javascript'> window.onload = function(){goModal('Unknown Error','An unknown error occured while processing the request.', false)}</script>";
+    } else {# An input error occured. Display what error(s) occured in a pop up.
+        echo "<script type='text/javascript'> window.onload = function(){goModal('Input Error','" . $_SESSION['popup'] . "', false)}</script>";
+    }
+    /*Unset the error value in case of refresh.*/
+    unset($_SESSION['popup']);
 }
+// Error statement in case the pop up does not show when it is supposed to.
+else {echo "<!-- The pop up window value was not set. -->";}
 ?>
 <title><?php echo $sv['site_name'];?> User Registration</title>
 <!--echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, then I figured out how to make a popup.', false)}</script>";-->
@@ -66,7 +66,7 @@ if(isset($_SESSION['CUmsg'])){
                         </td>
                     </tr>                    
                     
-					<tr>
+                    <tr>
                         <td>Icon</td>
                         <td>
                             <div class="form-group">
@@ -74,7 +74,7 @@ if(isset($_SESSION['CUmsg'])){
                         </td>
                     </tr>
 
-					<tr>
+                    <tr>
                         <td>Notes<a title = "Required">*</a></td>
                         <td>
                             <div class="form-group">
@@ -99,51 +99,47 @@ if(isset($_SESSION['CUmsg'])){
                         <td><input class="btn btn-primary" type="submit" name="submit" value="Submit">
                         <!-- Insert Query Here -->
                         <?php
-						
-						if (isset($_POST['submit'])){
-	
-							$r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
-							$operator = mysqli_real_escape_string($mysqli, $_POST['operator']);
-							$icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
-							$notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
-	
-							# Error handling
-							if(empty($r_id)||empty($operator)||empty($notes)){
-								$_SESSION['CUmsg'] = "Empty";
-								header("Location: ../manageUsers/createUser.php");
-								exit();
-							}else{
-								#Discuss other inputs with Jon, default expecting specific characters
-								if(!preg_match("/^[0-9]*$/", $r_id)||
-								!preg_match("/^[0-9]*$/", $operator)||!preg_match("/^[a-zA-Z]*$/", $icon)){
-									$_SESSION['CUmsg'] = "Field";
-									header("Location: ../manageUsers/createUser.php");
-									exit();
-								}else{
-									#Make sure you're not entering a user with a repat 1000s number
-									$sql = "SELECT * FROM users WHERE operator = '$operator'";
-									$result = mysqli_query($mysqli, $sql);
-									$resultCheck = mysqli_num_rows($result);
-									
-									if($resultCheck>0){ 
-										#if it's a repeat 1000s number, return to create user page with error message
-										$_SESSION['CUmsg'] = "Exists";
-										header("Location: ../manageUsers/createUser.php");
-										exit();
-									}else {
-										#else, add the user and return to create user page.
-										$sql = "INSERT INTO users (operator, r_id, icon, notes) VALUES ('$operator', 
-										'$r_id', '$icon', '$notes');";
-										mysqli_query($mysqli, $sql);
-										$_SESSION['CUmsg'] = "Success";
-										header("Location: ../manageUsers/createUser.php");
-										exit();
-									}
-								}
-							}
-							
-						} 
+                        $error_message = "";
+                        if (isset($_POST['submit'])){
+    
+                            $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
+                            $operator = mysqli_real_escape_string($mysqli, $_POST['operator']);
+                            $icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
+                            $notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
 
+                            $_SESSION['popup'] = "";
+                            $input_error = false;
+    
+                            # Error handling
+                            if(empty($r_id)||empty($operator)||empty($notes)){
+                                $_SESSION['popup'] .= "Make sure to complete all required fields.<br>";
+                                $input_error = true;
+                            }
+                            #Discuss other inputs with Jon, default expecting specific characters
+                            if(!preg_match("/^[0-9]*$/", $r_id)|| !preg_match("/^[0-9]*$/", $operator)|| !preg_match("/^[a-zA-Z]*$/", $icon)){
+                                $_SESSION['popup'] .= "Invalid symbols detected, make sure you are entering valid inputs.<br>";
+                                $input_error = true;
+                            }
+                            #Make sure you're not entering a user with a repat 1000s number
+                            $sql = "SELECT * FROM users WHERE operator = '$operator'";
+                            $result = mysqli_query($mysqli, $sql);
+                            $resultCheck = mysqli_num_rows($result);
+                                    
+                            if($resultCheck>0){ 
+                                #if it's a repeat 1000s number, return to create user page with error message
+                                $_SESSION['popup'] .= "The user you attempted to add has a 1000s number already in the database.<br>";
+                                $input_error = true;
+                            }
+                            # If there was no input error, then the query should be formatted correctly.
+                            if(!$input_error) {
+                                $sql = "INSERT INTO users (operator, r_id, icon, notes) VALUES ('$operator', '$r_id', '$icon', '$notes');";
+                                mysqli_query($mysqli, $sql);
+                                $_SESSION['popup'] = "Success";
+                            }
+
+                            header("Location: ../manageUsers/createUser.php");
+                            exit();
+                        }
                         ?>
                         </td>
                     </tr>
