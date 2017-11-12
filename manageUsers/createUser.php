@@ -4,6 +4,11 @@
  *   FabApp V 0.9
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
+if (!$staff || $staff->getRoleID() < 7){
+    //Not Authorized to see this Page
+    header('Location: /index.php');
+	exit();
+}
 /* Check for error from a previously submitted add user form.*/
 if(isset($_SESSION['CUmsg'])){
 	/* Handle appropriately*/
@@ -26,12 +31,10 @@ if(isset($_SESSION['CUmsg'])){
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">Create User</h1>
-        
     </div>
     <!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
-<a href="/manageUsers/index.php"><i class="fa fa-user-circle-o fa-fw"></i> Return to User Homepage</a>
 <div class="row">
     <div class="col-lg-10">
         <div class="alert alert-danger" role = "alert" id="errordiv" style="display:none;">
