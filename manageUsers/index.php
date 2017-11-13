@@ -56,12 +56,16 @@ if (!$staff || $staff->getRoleID() < 7){
         <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-user-circle-o fa-fw"></i> Create New Users
+                    <i class="fa fa-user-circle-o fa-fw"></i> User Options
                 </div>
                 <div class="panel-body">
                     <a href="/manageUsers/createUser.php">Create a new user</a>
                     <p></p>
                     <a href="/manageUsers/editUsers.php">Edit a user</a>
+                    <p></p>
+                    <a href="/manageUsers/#.php">User Profiles</a>
+                    <p></p>
+                    <a href="/manageUsers/#.php">View My Profile</a>
                 </div>
                 <!-- /.panel-body -->
             </div>
