@@ -12,9 +12,6 @@ if (!$staff || $staff->getRoleID() < 7){
 
 ?>
 <title><?php echo $sv['site_name'];?> User Management</title>
-
-echo "<script type='text/javascript'> window.onload = function(){goModal('Welcome','Welcome to the user management page.', true)}</script>";
-
 <body>
 <div id="page-wrapper">
     <div class="row">
@@ -28,7 +25,7 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Welcom
         <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-ticket fa-fw"></i> Manage Users
+                    <i class="fa fa-user-circle-o fa-fw"></i> Manage Users
                 </div>
                 <div class="panel-body">    
                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
@@ -59,10 +56,12 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Welcom
         <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-ticket fa-fw"></i> Create New Users
+                    <i class="fa fa-user-circle-o fa-fw"></i> Create New Users
                 </div>
                 <div class="panel-body">
-                    <a href="/manageUsers/createUser.php" echo $sv["forgotten"];?>Create a new User</a>
+                    <a href="/manageUsers/createUser.php">Create a new user</a>
+                    <p></p>
+                    <a href="/manageUsers/editUsers.php">Edit a user</a>
                 </div>
                 <!-- /.panel-body -->
             </div>
