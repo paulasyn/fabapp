@@ -50,6 +50,19 @@ else {echo "<!-- The pop up window value was not set. -->";}
 
                 <table class="table table-striped">
                     <tr>
+                    <td>User Type<a title = "Required">*</a></td>
+                    <td><label class="radio-inline">
+                        <input type="radio" name="userRadio" value="0">On Campus User
+                        </label>
+                        <label class="radio-inline">
+                        <input type="radio" name="userRadio" value="1">Off Campus User
+                        </label>
+                    </td>
+
+                    </tr>   
+                
+                
+                    <tr>
                         <td>Role ID<a title = "Required">*</a></td>
                         <td>
                             <div class="form-group">
