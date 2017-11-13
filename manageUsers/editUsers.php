@@ -25,12 +25,12 @@ if(isset($_SESSION['popup'])){
 // Error statement in case the pop up does not show when it is supposed to.
 else {echo "<!-- The pop up window value was not set. -->";}
 ?>
-<title><?php echo $sv['site_name'];?> User Registration</title>
+<title><?php echo $sv['site_name'];?> User Edit</title>
 <!--echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, then I figured out how to make a popup.', false)}</script>";-->
 <div id="page-wrapper">
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Create User</h1>
+        <h1 class="page-header">Edit User</h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -44,101 +44,38 @@ else {echo "<!-- The pop up window value was not set. -->";}
         
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-user-circle-o fa-fw"></i> New User Information
+                <i class="fa fa-users fa-fw"></i> New User Information
             </div>
             <form name="newUserForm" method= "POST"> <!--onsubmit="return insertNewUser();"-->
 
                 <table class="table table-striped">
+                    
+                    <tr> 
+                    <td>Enter User ID</td>
+
+                    <td>              
+                        <div class="input-group custom-search-form">
+                            <input type="number" name="searchField" class="form-control" placeholder="Search..." name="searchField" onclick="searchF()">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit" name="searchBtn">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </td>
+                    </tr> 
+                
                     <tr>
                     <td>User Type<a title = "Required">*</a></td>
                     <td><label class="radio-inline">
-                        <input type="radio" name="userRadio" value="0" checked="checked" onclick="handleClick(this);">On Campus User
+                        <input type="radio" name="userRadio" value="0">On Campus User
                         </label>
                         <label class="radio-inline">
-                        <input type="radio" name="userRadio" value="1" onclick="handleClick(this);">Off Campus User
+                        <input type="radio" name="userRadio" value="1">Off Campus User
                         </label>
-                        
-                        <script type = 'text/javascript'>function handleClick(userRadio)
-                        {
-                            var x = document.getElementById("offCampus");
-
-                            if (userRadio.value == 1){
-                                x.style.visibility = "visible";
-                            } else {
-                                x.style.visibility = "collapse";
-                           }
-                        }</script>
-                        
                     </td>
 
                     </tr>   
-                    <tbody class="offCampus" id="offCampus" style="visibility:collapse" >
+            
                     
-                    <tr>
-                        <td>First Name</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="fname">
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td>Last Name</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="lname">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Phone Number</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="phone" placeholder="xxx-xxx-xxxx">
-                        </td>
-                    </tr>
-
-                    <tr >
-                        <td>Email</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="email" placeholder="example@url.com">
-                        </td>
-                    </tr>
-
-                    <tr >
-                        <td>Address</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="address" placeholder="Street Address">
-                        </td>
-                    </tr>
-
-                    <tr >
-                        <td>City</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="city" placeholder="Example: Arlington">
-                        </td>
-                    </tr>
-
-                    <tr >
-                        <td>State</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="state" placeholder="Example: Texas">
-                        </td>
-                    </tr>
-
-                    <tr >
-                        <td>Zip</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="zip" placeholder="xxxxx">
-                        </td>
-                    </tr>
-
-                    </tbody>     
                     <tr>
                         <td>User ID<a title = "Required">*</a></td>
                         <td>
@@ -162,9 +99,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                             <input type="text" class = "form-control" name="notes" placeholder="Notes">
                         </td>
                     </tr>
-
-                 
-                  
+                       
                     <tr>
                         <td>Role ID<a title = "Required">*</a></td>
                         <td>
@@ -172,9 +107,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                             <input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID">
                         </td>
                     </tr>
-                    
-                    
-               
+      
                     <tr>
                         <td>Created By</td>
                         <td> <?php echo $staff->getOperator();?></td>
@@ -237,15 +170,11 @@ else {echo "<!-- The pop up window value was not set. -->";}
             </form>
         </div>
     </div>
-   
-        <!-- /.col-md-4 -->
 </div>
 <!-- /.col-lg-8 -->
-
 </div>
 </div>
 <!-- /#page-wrapper -->
-
 <?php
 //Standard call for dependencies
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/footer.php');
