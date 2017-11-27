@@ -33,6 +33,7 @@ if (!$staff || $staff->getRoleID() < 7){
                     <tr>
                         <th>Icon</th>
                         <th>UserID</th>
+                        <th>Edit</th>
                       
                     </tr>
                     </thead>
@@ -43,8 +44,10 @@ if (!$staff || $staff->getRoleID() < 7){
                     <tbody>
                     <?php while ($row = mysqli_fetch_array($result)) { ?>
                         <tr>
-                            <td><?php echo $row['icon']; ?></td>
+                            <td><i class="fa fa-<?php echo $row['icon'];?> fa-lg"></i></td>
                             <td><?php echo $row['operator']; ?></td>
+                            <?php $op = $row['operator']; ?>
+                            <td><a href="/manageUsers/editUsers.php?op=$op">Edit Profile</a></td>
                         </tr>
                     <?php } ?>
                     </tbody>

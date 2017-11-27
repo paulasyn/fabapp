@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2017 at 11:35 PM
+-- Generation Time: Nov 27, 2017 at 12:42 AM
 -- Server version: 5.6.24
 -- PHP Version: 5.3.29
 
@@ -125,8 +125,17 @@ CREATE TABLE IF NOT EXISTS `citation` (
   `operator` varchar(10) NOT NULL,
   `trans_id` int(11) DEFAULT NULL,
   `c_date` datetime NOT NULL,
-  `c_notes` text NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `c_notes` text NOT NULL,
+  `level` int(1) NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `citation`
+--
+
+INSERT INTO `citation` (`c_id`, `staff_id`, `operator`, `trans_id`, `c_date`, `c_notes`, `level`) VALUES
+(1, '1000000010', '1006833293', NULL, '2017-11-12 23:31:58', 'This guy doesn''t do his job correctly.', 0),
+(2, '1000000010', '1006833293', NULL, '2017-11-13 13:39:07', 'This is a demo.', 0);
 
 -- --------------------------------------------------------
 
@@ -525,6 +534,7 @@ CREATE TABLE IF NOT EXISTS `offcampus` (
   `operator` varchar(10) NOT NULL,
   `fname` varchar(30) NOT NULL,
   `lname` varchar(30) NOT NULL,
+  `phone` int(10) DEFAULT NULL,
   `email` varchar(50) NOT NULL,
   `address` varchar(95) NOT NULL,
   `city` varchar(35) NOT NULL,
@@ -770,7 +780,7 @@ CREATE TABLE IF NOT EXISTS `time_clock` (
   `start_time` datetime NOT NULL,
   `end_time` datetime DEFAULT NULL,
   `duration` time DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -925,7 +935,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `icon` varchar(20) DEFAULT NULL,
   `adj_date` datetime DEFAULT NULL,
   `notes` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
@@ -939,7 +949,10 @@ INSERT INTO `users` (`u_id`, `operator`, `r_id`, `exp_date`, `icon`, `adj_date`,
 (5, '1000000007', 7, NULL, NULL, NULL, ''),
 (6, '1000000008', 8, NULL, NULL, NULL, ''),
 (7, '1000000009', 9, NULL, 'bicycle', NULL, ''),
-(8, '1000000010', 10, NULL, 'institution', NULL, '');
+(8, '1000000010', 10, NULL, 'institution', NULL, ''),
+(9, '100055784', 10, NULL, 'house', NULL, 'nothing'),
+(10, '1006833293', 7, NULL, 'music', NULL, 'second added'),
+(11, '100044678', 10, NULL, 'tree', NULL, 'This is a demo');
 
 --
 -- Indexes for dumped tables
@@ -1154,7 +1167,7 @@ ALTER TABLE `carrier`
 -- AUTO_INCREMENT for table `citation`
 --
 ALTER TABLE `citation`
-  MODIFY `c_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `c_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `devices`
 --
@@ -1229,7 +1242,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT for table `time_clock`
 --
 ALTER TABLE `time_clock`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `trainingmodule`
 --
@@ -1244,7 +1257,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- Constraints for dumped tables
 --
