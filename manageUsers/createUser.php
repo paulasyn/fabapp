@@ -52,17 +52,17 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <tr>
                     <td>User Type<a title = "Required">*</a></td>
                     <td><label class="radio-inline">
-                        <input type="radio" name="userRadio" value="0" checked="checked" onclick="handleClick(this);">On Campus User
+                        <input type="radio" name="userRadio" campusValue="0" checked="checked" onclick="handleClick(this);">On Campus User
                         </label>
                         <label class="radio-inline">
-                        <input type="radio" name="userRadio" value="1" onclick="handleClick(this);">Off Campus User
+                        <input type="radio" name="userRadio" campusValue="1" onclick="handleClick(this);">Off Campus User
                         </label>
                         
                         <script type = 'text/javascript'>function handleClick(userRadio)
                         {
                             var x = document.getElementById("offCampus");
 
-                            if (userRadio.value == 1){
+                            if (userRadio.campusValue == 1){
                                 x.style.visibility = "visible";
                             } else {
                                 x.style.visibility = "collapse";
