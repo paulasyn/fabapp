@@ -531,7 +531,13 @@ INSERT INTO `objbox` (`o_id`, `o_start`, `o_end`, `address`, `operator`, `trans_
 --
 
 CREATE TABLE IF NOT EXISTS `offcampus` (
+  `u_id` int(11) NOT NULL,
   `operator` varchar(10) NOT NULL,
+  `r_id` int(11) NOT NULL,
+  `exp_date` datetime DEFAULT NULL,
+  `icon` varchar(20) DEFAULT NULL,
+  `adj_date` datetime DEFAULT NULL,
+  `notes` text NOT NULL,
   `fname` varchar(30) NOT NULL,
   `lname` varchar(30) NOT NULL,
   `phone` int(10) DEFAULT NULL,
@@ -540,7 +546,7 @@ CREATE TABLE IF NOT EXISTS `offcampus` (
   `city` varchar(35) NOT NULL,
   `state` varchar(35) NOT NULL,
   `zip` int(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
