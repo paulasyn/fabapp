@@ -546,7 +546,7 @@ CREATE TABLE IF NOT EXISTS `offcampus` (
   `city` varchar(35) NOT NULL,
   `state` varchar(35) NOT NULL,
   `zip` int(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
