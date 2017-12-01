@@ -47,7 +47,8 @@ if (!$staff || $staff->getRoleID() < 7){
                             <td><i class="fa fa-<?php echo $row['icon'];?> fa-lg"></i></td>
                             <td><?php echo $row['operator']; ?></td>
                             <?php $op = $row['operator']; ?>
-                            <td><a href="/manageUsers/editUsers.php?op=$op">Edit Profile</a></td>
+                            <?php if ($staff) { ?> <td><a href="/manageUsers/editUsers.php?operator=$row['operator']">Edit Profile</a></td><?php } ?>
+                                                        <!-- How to pass operator to next page? -->
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -66,9 +67,7 @@ if (!$staff || $staff->getRoleID() < 7){
                     <p></p>
                     <a href="/manageUsers/editUsers.php">Edit a user</a>
                     <p></p>
-                    <a href="/manageUsers/#.php">User Profiles</a>
-                    <p></p>
-                    <a href="/manageUsers/#.php">View My Profile</a>
+                    <a href="/manageUsers/viewMyProfile.php">View My Profile</a>
                 </div>
                 <!-- /.panel-body -->
             </div>

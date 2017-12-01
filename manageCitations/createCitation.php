@@ -73,7 +73,18 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Test',
                     </td>
                     </tr>
                     
-                    
+                    <tr>
+                        <td>Severity<a title = "Required">*</a></td>
+                        <td>
+                        <label class="radio-inline">
+                        <input type="radio" name="userRadio" value="0" checked="checked">Low
+                        </label>
+                        <label class="radio-inline">
+                        <input type="radio" name="userRadio" value="1">High
+                        </div>
+                    </td>
+                    </tr>
+
                         <td>Current Date</td>
                         <td><?php echo $date = date("m/d/Y h:i a", time());?></td>
                     </tr>
