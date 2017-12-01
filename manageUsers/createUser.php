@@ -16,6 +16,8 @@ if(isset($_SESSION['popup'])){
         echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully added.', false)}</script>";
     } elseif($_SESSION['popup'] == ""){# Check if the pop up message is empty. This only happens if the submit button was hit but nothing was added for the pop up message. This is unexpected behavior.
         echo "<script type='text/javascript'> window.onload = function(){goModal('Unknown Error','An unknown error occured while processing the request.', true)}</script>";
+    }elseif($_SESSION['popup'] == "Table did not update"){# Check if the pop up message is empty. This only happens if the submit button was hit but nothing was added for the pop up message. This is unexpected behavior.
+        echo "<script type='text/javascript'> window.onload = function(){goModal('SQL Error','" . $_SESSION['popup'] . "', false)}</script>";
     } else {# An input error occured. Display what error(s) occured in a pop up.
         echo "<script type='text/javascript'> window.onload = function(){goModal('Input Error','" . $_SESSION['popup'] . "', true)}</script>";
     }
@@ -52,17 +54,17 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <tr>
                     <td>User Type<a title = "Required">*</a></td>
                     <td><label class="radio-inline">
-                        <input type="radio" name="userRadio" campusValue="0" checked="checked" onclick="handleClick(this);">On Campus User
+                        <input type="radio" name="userRadio" value="0" checked="checked" onclick="handleClick(this);">On Campus User
                         </label>
                         <label class="radio-inline">
-                        <input type="radio" name="userRadio" campusValue="1" onclick="handleClick(this);">Off Campus User
+                        <input type="radio" name="userRadio" value="1" onclick="handleClick(this);">Off Campus User
                         </label>
                         
                         <script type = 'text/javascript'>function handleClick(userRadio)
                         {
                             var x = document.getElementById("offCampus");
 
-                            if (userRadio.campusValue == 1){
+                            if (userRadio.value == 1){
                                 x.style.visibility = "visible";
                             } else {
                                 x.style.visibility = "collapse";
@@ -191,20 +193,20 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <?php
                         $error_message = "";
                         if (isset($_POST['submit'])){
-							$userType = $_POST['userRadio'];#To check the value of the radio button
+                            $userType = $_POST['userRadio'];#To check the value of the radio button
                             $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']); #Needed for both off and on campus
                             $operator = mysqli_real_escape_string($mysqli, $_POST['operator']); #Needed for both off and on campus
                             $icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
                             $notes = mysqli_real_escape_string($mysqli, $_POST['notes']); #Needed for both off and on campus
-							#Above, values for on campus. Below, values for off campus.
-							$zip = mysqli_real_escape_string($mysqli, $_POST['zip']);#Zip zip
-							$state = mysqli_real_escape_string($mysqli, $_POST['state']);#State state
-							$city = mysqli_real_escape_string($mysqli, $_POST['city']);#City city 
-							$address = mysqli_real_escape_string($mysqli, $_POST['address']);#Street address
-							$email = mysqli_real_escape_string($mysqli, $_POST['email']);#email email
-							$phone = mysqli_real_escape_string($mysqli, $_POST['phone']);#Phone phone
-							$lname = mysqli_real_escape_string($mysqli, $_POST['lname']);#Last Name lname
-							$fname = mysqli_real_escape_string($mysqli, $_POST['fname']);#First Name fname
+                            #Above, values for on campus. Below, values for off campus.
+                            $zip = mysqli_real_escape_string($mysqli, $_POST['zip']);#Zip zip
+                            $state = mysqli_real_escape_string($mysqli, $_POST['state']);#State state
+                            $city = mysqli_real_escape_string($mysqli, $_POST['city']);#City city 
+                            $address = mysqli_real_escape_string($mysqli, $_POST['address']);#Street address
+                            $email = mysqli_real_escape_string($mysqli, $_POST['email']);#email email
+                            $phone = mysqli_real_escape_string($mysqli, $_POST['phone']);#Phone phone
+                            $lname = mysqli_real_escape_string($mysqli, $_POST['lname']);#Last Name lname
+                            $fname = mysqli_real_escape_string($mysqli, $_POST['fname']);#First Name fname
 							
                             $_SESSION['popup'] = "";
                             $input_error = false;
@@ -220,12 +222,12 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 $input_error = true;
                             }
                             #Make sure you're not entering a user with a repat 1000s number
-							if ($userType == "0"){#on campus table operators
-								$sql = "SELECT * FROM users WHERE operator = '$operator'";
-							}
-							else{ #off campus table operators
-								$sql = "SELECT * FROM offcampus WHERE operator = '$operator'";
-							}
+                            if ($userType == "0"){#on campus table operators
+                                $sql = "SELECT * FROM users WHERE operator = '$operator'";
+                            }
+                            else{ #off campus table operators
+                                $sql = "SELECT * FROM offcampus WHERE operator = '$operator'";
+                            }
                             $result = mysqli_query($mysqli, $sql);
                             $resultCheck = mysqli_num_rows($result);
                                     
@@ -236,14 +238,19 @@ else {echo "<!-- The pop up window value was not set. -->";}
                             }
                             # If there was no input error, then the query should be formatted correctly.
                             if(!$input_error) {
-								if ($userType == "0"){#on campus table operators
-									$sql = "INSERT INTO users (operator, r_id, icon, notes) VALUES ('$operator', '$r_id', '$icon', '$notes');";
-								}
+                                if ($userType == "0"){#on campus table operators
+                                    $sql = "INSERT INTO users (operator, r_id, icon, notes) VALUES ('$operator', '$r_id', '$icon', '$notes');";
+                                }
+                                else{
+									$sql = "INSERT INTO offcampus (operator, r_id, icon, notes, fname, lname, phone, email, address, city, state, zip) VALUES ('$operator', '$r_id', '$icon', '$notes', '$fname', '$lname', '$phone','$email','$address','$city','$state','$zip');"; 
+                                }
+                                $checksql = mysqli_query($mysqli, $sql);
+                                if ($checksql == FALSE){
+                                    $_SESSION['popup'] .= "Table did not update" ;
+                                }
 								else{
-									$sql = "INSERT INTO offcampus (operator, fname, lname, phone, email, address, city, state, zip) VALUES ('$operator', '$fname', '$lname', '$phone','$email','$address','$city','$state','$zip');"; #offcampus table needs r_id icon and notes columns
-								}
-                                mysqli_query($mysqli, $sql);
-                                $_SESSION['popup'] = "Success";
+                                    $_SESSION['popup'] = "Success";
+                                }
                             }
 
                             header("Location: ../manageUsers/createUser.php");
