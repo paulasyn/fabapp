@@ -19,7 +19,7 @@ if(isset($_SESSION['popup'])){
     }elseif($_SESSION['popup'] == "Table did not update"){# Check if the pop up message is empty. This only happens if the submit button was hit but nothing was added for the pop up message. This is unexpected behavior.
         echo "<script type='text/javascript'> window.onload = function(){goModal('SQL Error','" . $_SESSION['popup'] . "', false)}</script>";
     } else {# An input error occured. Display what error(s) occured in a pop up.
-        echo "<script type='text/javascript'> window.onload = function(){goModal('Input Error','" . $_SESSION['popup'] . "', true)}</script>";
+        echo "<script type='text/javascript'> window.onload = function(){goModal('Input Error','" . $_SESSION['popup'] . "', false)}</script>";
     }
     /*Unset the error value in case of refresh.*/
     unset($_SESSION['popup']);
@@ -30,7 +30,6 @@ else {echo "<!-- The pop up window value was not set. -->";}
 
 
 <title><?php echo $sv['site_name'];?> User Registration</title>
-<!--echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, then I figured out how to make a popup.', false)}</script>";-->
 <div id="page-wrapper">
 <div class="row">
     <div class="col-lg-12">
@@ -246,11 +245,13 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                     $sql = "INSERT INTO users (operator, r_id, icon, notes) VALUES ('$operator', '$r_id', '$icon', '$notes');";
                                 }
                                 else{
-									$sql = "INSERT INTO offcampus (operator, r_id, icon, notes, fname, lname, phone, email, address, city, state, zip) VALUES ('$operator', '$r_id', '$icon', '$notes', '$fname', '$lname', '$phone','$email','$address','$city','$state','$zip');"; 
+									$sql = "INSERT INTO offcampus (operator, r_id, icon, notes, fname, lname, phone, email, address, city, state, zip) VALUES ('$operator','$r_id','$icon','$notes','$fname','$lname','$phone','$email','$address','$city','$state','$zip');";
                                 }
                                 $checksql = mysqli_query($mysqli, $sql);
                                 if ($checksql == FALSE){
+
                                     $_SESSION['popup'] .= "Table did not update, please check fields." ;
+
                                 }
 								else{
                                     $_SESSION['popup'] = "Success";
