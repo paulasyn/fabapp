@@ -14,9 +14,9 @@ if(isset($_SESSION['CCmsg'])){
 	if($_SESSION['CCmsg'] == "Success"){ #User added successfully
 		echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The citation was successfully submitted.', false)}</script>";
 	} elseif($_SESSION['CCmsg'] == "Field"){#Field has invalid characters
-		echo "<script type='text/javascript'> window.onload = function(){goModal('Symbol Error','Invalid symbols detected, make sure you are entering valid inputs.', false)}</script>";
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Symbol Error','Invalid symbols detected, make sure you are entering valid inputs.', true)}</script>";
 	} elseif($_SESSION['CCmsg'] == "Empty"){#Required field left empty
-		echo "<script type='text/javascript'> window.onload = function(){goModal('Empty Field','Make sure to complete all required fields.', false)}</script>";
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Empty Field','Make sure to complete all required fields.', true)}</script>";
 	}
 /*Unset the error value in case of refresh.*/
 unset($_SESSION['CCmsg']);

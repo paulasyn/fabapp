@@ -532,21 +532,21 @@ INSERT INTO `objbox` (`o_id`, `o_start`, `o_end`, `address`, `operator`, `trans_
 
 CREATE TABLE IF NOT EXISTS `offcampus` (
   `u_id` int(11) NOT NULL,
-  `operator` varchar(10) NOT NULL,
+  `operator` varchar(10) CHARACTER SET utf8 NOT NULL,
   `r_id` int(11) NOT NULL,
   `exp_date` datetime DEFAULT NULL,
-  `icon` varchar(20) DEFAULT NULL,
+  `icon` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `adj_date` datetime DEFAULT NULL,
-  `notes` text NOT NULL,
-  `fname` varchar(30) NOT NULL,
-  `lname` varchar(30) NOT NULL,
+  `notes` text CHARACTER SET utf8 NOT NULL,
+  `fname` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `lname` varchar(30) CHARACTER SET utf8 NOT NULL,
   `phone` int(10) DEFAULT NULL,
-  `email` varchar(50) NOT NULL,
-  `address` varchar(95) NOT NULL,
-  `city` varchar(35) NOT NULL,
-  `state` varchar(35) NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `address` varchar(95) CHARACTER SET utf8 NOT NULL,
+  `city` varchar(35) CHARACTER SET utf8 NOT NULL,
+  `state` varchar(35) CHARACTER SET utf8 NOT NULL,
   `zip` int(5) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1044,8 +1044,9 @@ ALTER TABLE `objbox`
 -- Indexes for table `offcampus`
 --
 ALTER TABLE `offcampus`
-  ADD PRIMARY KEY (`operator`);
-
+  ADD PRIMARY KEY (`u_id`),
+  ADD KEY `operator` (`operator`);
+  
 --
 -- Indexes for table `purpose`
 --
@@ -1204,6 +1205,11 @@ ALTER TABLE `mats_used`
 --
 ALTER TABLE `objbox`
   MODIFY `o_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
 --
 -- AUTO_INCREMENT for table `purpose`
 --
