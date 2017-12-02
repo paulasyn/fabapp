@@ -42,13 +42,24 @@ if (!$staff || $staff->getRoleID() < 7){
                     $result = $mysqli->query ("SELECT `operator`, `icon` FROM `users` WHERE 1 ORDER BY `operator` ASC") or die("Bad Query: $result");
                     ?>
                     <tbody>
-                    <?php while ($row = mysqli_fetch_array($result)) { ?>
+                    <?php 
+					$i = 0; 
+					while ($row = mysqli_fetch_array($result)) { ?>
                         <tr>
                             <td><i class="fa fa-<?php echo $row['icon'];?> fa-lg"></i></td>
                             <td><?php echo $row['operator']; ?></td>
                             <?php $op = $row['operator']; ?>
-                            <?php if ($staff) { ?> <td><a href="/manageUsers/editUsers.php?operator=$row['operator']">Edit Profile</a></td><?php } ?>
-                                                        <!-- How to pass operator to next page? -->
+                            <?php if ($staff) { $_SESSION['op'][$op] = $op;?> <td><a href="/manageUsers/editUsers.php?operator=<?php echo $op;?>">Edit Profile</a></td><?php } ?>
+                            <!-- Create $_SESSION array of all operators. In editUsers.php, check that $_SESSION['op'][$_GET[operator]] is set.
+							if it is, then the user navigated from this page, and the operator existed in the table. If not, then the user
+							manually entered operator into the table, and the input should be ignored for sql safety. In the case that the user
+							manually entered an operator that does exist through the address bar, it will be ignored as $_SESSION['op']
+							will be unset by the time the page is refreshed. The user should have no reason to enter the operator through
+							the address bar. The operator value passed through href is strictly to be used for checking the operator that is
+							meant to be edited, and that it was accessed through the edit user link in the table created above. It should never 
+							directly affect a SQL query.
+							If possible, look for a more efficient solution, as large user tables would mean a large number of values in the session array.
+							However, this solution works, and, to the knowledge of the team, works securely.-->
                         </tr>
                     <?php } ?>
                     </tbody>

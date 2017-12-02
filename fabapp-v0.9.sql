@@ -1045,7 +1045,7 @@ ALTER TABLE `objbox`
 --
 ALTER TABLE `offcampus`
   ADD PRIMARY KEY (`u_id`),
-  ADD KEY `operator` (`operator`);
+  ADD UNIQUE KEY `operator` (`operator`);
   
 --
 -- Indexes for table `purpose`
@@ -1208,7 +1208,7 @@ ALTER TABLE `objbox`
 --
 -- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `users`
+ALTER TABLE `offcampus`
   MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
 --
 -- AUTO_INCREMENT for table `purpose`
@@ -1274,11 +1274,7 @@ ALTER TABLE `users`
 -- Constraints for dumped tables
 --
 
---
--- Constraints for table `offcampus`
---
-ALTER TABLE `offcampus`
-  ADD CONSTRAINT `offcampus_ibfk_1` FOREIGN KEY (`operator`) REFERENCES `users` (`operator`);
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

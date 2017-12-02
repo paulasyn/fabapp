@@ -9,6 +9,14 @@ if (!$staff || $staff->getRoleID() < 7){
     header('Location: /index.php');
 	exit();
 }
+if(isset ($_GET['operator'])){//Check if an operator is set in the address bar
+	if(isset($_SESSION['op'])){//if it is, make sure that a session value is set for that operator from index.php
+	    if(isset($_SESSION['op'][$_GET['operator']])){//if there is a session value, then use the verified operator as the operator 
+		    $receivedOperator = $_SESSION['op'][$_GET['operator']];//for the user that is being updated.
+	    }
+	unset($_SESSION['op']);
+	}//if the operator value in the address bar doesn't have an assoiciated session value, ignore it, as it may be malicious.
+}
 /* Check for error from a previously submitted add user form.*/
 if(isset($_SESSION['popup'])){
     /* Handle appropriately*/
@@ -26,11 +34,10 @@ if(isset($_SESSION['popup'])){
 else {echo "<!-- The pop up window value was not set. -->";}
 ?>
 <title><?php echo $sv['site_name'];?> User Edit</title>
-<!--echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, then I figured out how to make a popup.', false)}</script>";-->
 <div id="page-wrapper">
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Edit User</h1>
+        <h1 class="page-header">Edit User <?php if(isset($receivedOperator)){echo $receivedOperator;}?></h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -53,13 +60,16 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <tr> 
                     <td>Enter User ID</td>
 
-                    <td>              
+                    <td>   
+                        <?php if(isset($receivedOperator)){ echo $receivedOperator;?>
+						<?php }else{ ?>
                         <div class="input-group custom-search-form">
                             <input type="number" name="searchField" class="form-control" placeholder="Search..." name="searchField" onclick="searchF()">
                             <span class="input-group-btn">
                             <button class="btn btn-default" type="submit" name="searchBtn">
                             <i class="fa fa-search"></i>
                         </div>
+						<?php } ?>
                     </td>
                     </tr> 
                 
@@ -79,8 +89,11 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <tr>
                         <td>User ID<a title = "Required">*</a></td>
                         <td>
+						    <?php if(isset($receivedOperator)){ echo $receivedOperator;?>
+						    <?php }else{ ?>
                             <div class="form-group">
                             <input type="text" class = "form-control" name="operator" placeholder="Enter 1000s Number">
+							<?php } ?>
                         </td>
                     </tr>                    
                     
@@ -138,6 +151,10 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 $_SESSION['popup'] .= "Make sure to complete all required fields.<br>";
                                 $input_error = true;
                             }
+							if($operator == $staff->getOperator()){
+                                $_SESSION['popup'] .= "User is attempting to edit their own profile.<br>";
+                                $input_error = true;
+                            }
                             #Discuss other inputs with Jon, default expecting specific characters
                             if(!preg_match("/^[0-9]*$/", $r_id)|| !preg_match("/^[0-9]*$/", $operator)|| !preg_match("/^[a-zA-Z]*$/", $icon)){
                                 $_SESSION['popup'] .= "Invalid symbols detected, make sure you are entering valid inputs.<br>";
@@ -160,7 +177,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 $_SESSION['popup'] = "Success";
                             }
 
-                            header("Location: ../manageUsers/createUser.php");
+                            header("Location: ../manageUsers/editUser.php");
                             exit();
                         }
                         ?>
