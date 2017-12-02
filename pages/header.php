@@ -306,6 +306,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+
+<?php }
+    if (is_object($staff) && $staff->getRoleID() < 6)  { 
+ ?>
+                        <li>
+                            <a href="/service/newTicket.php"><i class="fa fa-user fa-fw"></i> View My Profile </a>
+                        </li>
+
 <?php } ?>
                     </ul>
                 </div>

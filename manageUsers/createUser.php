@@ -27,6 +27,8 @@ if(isset($_SESSION['popup'])){
 // Error statement in case the pop up does not show when it is supposed to.
 else {echo "<!-- The pop up window value was not set. -->";}
 ?>
+
+
 <title><?php echo $sv['site_name'];?> User Registration</title>
 <!--echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, then I figured out how to make a popup.', false)}</script>";-->
 <div id="page-wrapper">
@@ -179,7 +181,9 @@ else {echo "<!-- The pop up window value was not set. -->";}
                
                     <tr>
                         <td>Created By</td>
-                        <td> <?php echo $staff->getOperator();?></td>
+
+                        <td> <?php $thisUser = $staff->getOperator();
+                                echo $thisUser;?></td>
                     </tr>
                     <tr>
                         <td>Current Date</td>
@@ -246,7 +250,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 }
                                 $checksql = mysqli_query($mysqli, $sql);
                                 if ($checksql == FALSE){
-                                    $_SESSION['popup'] .= "Table did not update" ;
+                                    $_SESSION['popup'] .= "Table did not update, please check fields." ;
                                 }
 								else{
                                     $_SESSION['popup'] = "Success";
