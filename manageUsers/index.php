@@ -10,6 +10,24 @@ if (!$staff || $staff->getRoleID() < 7){
 	exit();
 }
 
+/* Check for error from a previously submitted add user form.*/
+if(isset($_SESSION['popup'])){
+    /* Handle appropriately*/
+    if($_SESSION['popup'] == "Delete"){ # User added successfully
+        echo "<script type='text/javascript'> window.onload = function(){goModal('Delete','Are you sure you want to delete this user?', false)}</script>";
+    } elseif($_SESSION['popup'] == ""){# Check if the pop up message is empty. This only happens if the submit button was hit but nothing was added for the pop up message. This is unexpected behavior.
+        echo "<script type='text/javascript'> window.onload = function(){goModal('Unknown Error','An unknown error occured while processing the request.', true)}</script>";
+    }elseif($_SESSION['popup'] == "Table did not update"){# Check if the pop up message is empty. This only happens if the submit button was hit but nothing was added for the pop up message. This is unexpected behavior.
+        echo "<script type='text/javascript'> window.onload = function(){goModal('SQL Error','" . $_SESSION['popup'] . "', false)}</script>";
+    } else {# An input error occured. Display what error(s) occured in a pop up.
+        echo "<script type='text/javascript'> window.onload = function(){goModal('Input Error','" . $_SESSION['popup'] . "', false)}</script>";
+    }
+    /*Unset the error value in case of refresh.*/
+    unset($_SESSION['popup']);
+}
+// Error statement in case the pop up does not show when it is supposed to.
+else {echo "<!-- The pop up window value was not set. -->";}
+
 ?>
 <title><?php echo $sv['site_name'];?> User Management</title>
 <body>
@@ -61,7 +79,19 @@ if (!$staff || $staff->getRoleID() < 7){
 							directly affect a SQL query.
 							If possible, look for a more efficient solution, as large user tables would mean a large number of values in the session array.
 							However, this solution works, and, to the knowledge of the team, works securely.-->
-                            <td><a href="#">Delete User</a></td>
+                            <td>
+                            <div class="col-md-3 text-center"> 
+                                <a onclick="<?php $_SESSION['popup'] = "Delete";?>" href="?operator=<?php echo $row['operator']?>" class="btn btn-danger">Delete User</button>
+                                <?php
+                                
+                                    // $op = $_POST['operator'];  
+                                    // $sql = "DELETE FROM `fabapp-v0.9`.`users` WHERE `users`.`operator` = $row['operator']";
+                                    // $result = mysqli_query($mysqli, $sql);
+                                    // $_SESSION['popup'] = "Deleted User: $op";
+                                
+                                ?>
+                            </div>
+                            </td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -126,8 +156,12 @@ if (!$staff || $staff->getRoleID() < 7){
                         directly affect a SQL query.
                         If possible, look for a more efficient solution, as large user tables would mean a large number of values in the session array.
                         However, this solution works, and, to the knowledge of the team, works securely.-->
-                        <td><a href="#">Delete User</a></td>
-                        </tr>
+                        <td>
+                        <div class="col-md-3 text-center"> 
+                            <button id="deleteOffButton" name="button" class="btn btn-primary">Delete User</button>
+
+                        </div>
+                        </td></tr>
                     <?php } ?>
                     </tbody>
                 </table>              
