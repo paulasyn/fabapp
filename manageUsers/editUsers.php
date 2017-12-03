@@ -9,14 +9,9 @@ if (!$staff || $staff->getRoleID() < 7){
     header('Location: /index.php');
 	exit();
 }
-if(isset ($_GET['operator'])){//Check if an operator is set in the address bar
-	if(isset($_SESSION['op'])){//if it is, make sure that a session value is set for that operator from index.php
-	    if(isset($_SESSION['op'][$_GET['operator']])){//if there is a session value, then use the verified operator as the operator 
-		    $receivedOperator = $_SESSION['op'][$_GET['operator']];//for the user that is being updated.
-	    }
-	unset($_SESSION['op']);
-	}//if the operator value in the address bar doesn't have an assoiciated session value, ignore it, as it may be malicious.
-}
+if(isset($_POST['operator'])){
+	$receivedOperator = $_POST['operator'];
+}	
 /* Check for error from a previously submitted add user form.*/
 if(isset($_SESSION['popup'])){
     /* Handle appropriately*/
@@ -61,11 +56,11 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         $oncampus_user = FALSE;
 
                         
-                        if (($mysqli->query ("SELECT count(*) FROM `users` WHERE `operator` = '$thisUser'")) > 0){
+                        if (!($mysqli->query ("SELECT count(*) FROM `users` WHERE `operator` = '$thisUser'"))){
                             $result = $mysqli->query ("SELECT * FROM `users` WHERE `operator` = '$thisUser'") or die("Bad Query: $result");  
                             $oncampus_user = TRUE;  
                         }
-                        else if (($mysqli->query("SELECT count(*) FROM `offcampus` WHERE `operator` = '$thisUser'")) > 0){
+                        else if (!($mysqli->query("SELECT count(*) FROM `offcampus` WHERE `operator` = '$thisUser'"))){
                             $result = $mysqli->query ("SELECT * FROM `offcampus` WHERE `operator` = '$thisUser'") or die("Bad Query: $result");                              
                             $offcampus_user = TRUE;       
                         }  
