@@ -37,7 +37,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
 <div id="page-wrapper">
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Edit User <?php if(isset($receivedOperator)){echo $receivedOperator;}?></h1>
+        <h1 class="page-header">Edit User <?php if(isset($receivedOperator)){$thisUser = $receivedOperator; echo $thisUser;}?></h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -51,49 +51,98 @@ else {echo "<!-- The pop up window value was not set. -->";}
         
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-users fa-fw"></i> New User Information
+                <i class="fa fa-users fa-fw"></i> Edit User Information
             </div>
             <form name="newUserForm" method= "POST"> <!--onsubmit="return insertNewUser();"-->
 
                 <table class="table table-striped">
-                    
-                    <tr> 
-                    <td>Enter User ID</td>
+                    <?php
+                        $offcampus_user = FALSE;
+                        $oncampus_user = FALSE;
 
-                    <td>   
-                        <?php if(isset($receivedOperator)){ echo $receivedOperator;?>
-						<?php }else{ ?>
-                        <div class="input-group custom-search-form">
-                            <input type="number" name="searchField" class="form-control" placeholder="Search..." name="searchField" onclick="searchF()">
-                            <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit" name="searchBtn">
-                            <i class="fa fa-search"></i>
-                        </div>
-						<?php } ?>
-                    </td>
-                    </tr> 
-                
-                    <tr>
-                    <td>User Type<a title = "Required">*</a></td>
-                    <td><label class="radio-inline">
-                        <input type="radio" name="userRadio" value="0">On Campus User
-                        </label>
-                        <label class="radio-inline">
-                        <input type="radio" name="userRadio" value="1">Off Campus User
-                        </label>
-                    </td>
+                        
+                        if (($mysqli->query ("SELECT count(*) FROM `users` WHERE `operator` = '$thisUser'")) > 0){
+                            $result = $mysqli->query ("SELECT * FROM `users` WHERE `operator` = '$thisUser'") or die("Bad Query: $result");  
+                            $oncampus_user = TRUE;  
+                        }
+                        else if (($mysqli->query("SELECT count(*) FROM `offcampus` WHERE `operator` = '$thisUser'")) > 0){
+                            $result = $mysqli->query ("SELECT * FROM `offcampus` WHERE `operator` = '$thisUser'") or die("Bad Query: $result");                              
+                            $offcampus_user = TRUE;       
+                        }  
+                        $row = mysqli_fetch_array($result);
+                    ?>
 
-                    </tr>   
-            
+                <tbody class="offCampus" id="offCampus" style="visibility:visible" >
                     
                     <tr>
-                        <td>User ID<a title = "Required">*</a></td>
+                        <td>First Name</td>
                         <td>
-						    <?php if(isset($receivedOperator)){ echo $receivedOperator;?>
-						    <?php }else{ ?>
                             <div class="form-group">
-                            <input type="text" class = "form-control" name="operator" placeholder="Enter 1000s Number">
-							<?php } ?>
+                            <input type="text" class = "form-control" name="fname" placeholder="First Name" value="<?php echo $row['fname'];?>">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Last Name</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="text" class = "form-control" name="lname" placeholder="Last Name" value="<?php echo $row['lname'];?>">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Phone Number</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="text" class = "form-control" name="phone" placeholder="xxx-xxx-xxxx" value="<?php echo $row['phone'];?>">
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td>Email</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="text" class = "form-control" name="email" placeholder="example@url.com"value="<?php echo $row['email'];?>">
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td>Address</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="text" class = "form-control" name="address" placeholder="Street Address" value="<?php echo $row['address'];?>">
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td>City</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="text" class = "form-control" name="city" placeholder="Example: Arlington" value="<?php echo $row['city'];?>">
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td>State</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="text" class = "form-control" name="state" placeholder="Example: Texas" value="<?php echo $row['state'];?>">
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td>Zip</td>
+                        <td>
+                            <div class="form-group">
+                            <input type="text" class = "form-control" name="zip" placeholder="xxxxx" value="<?php echo $row['zip'];?>">
+                        </td>
+                    </tr>
+
+                    </tbody>  
+                    <tr>
+                        <td>User ID</td>
+                        <td>
+						    <?php echo $thisUser;?>
                         </td>
                     </tr>                    
                     
@@ -101,28 +150,28 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <td>Icon</td>
                         <td>
                             <div class="form-group">
-                            <input type="text" class = "form-control" name="icon">
+                            <input type="text" class = "form-control" name="icon" placeholder="Icon" value="<?php echo $row['icon'];?>">
                         </td>
                     </tr>
 
                     <tr>
-                        <td>Notes<a title = "Required">*</a></td>
+                        <td>Notes</td>
                         <td>
                             <div class="form-group">
-                            <input type="text" class = "form-control" name="notes" placeholder="Notes">
+                            <input type="text" class = "form-control" name="notes" placeholder="Notes" value="<?php echo $row['notes'];?>">
                         </td>
                     </tr>
                        
                     <tr>
-                        <td>Role ID<a title = "Required">*</a></td>
+                        <td>Role ID</td>
                         <td>
                             <div class="form-group">
-                            <input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID">
+                            <input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID" value="<?php echo $row['r_id'];?>">
                         </td>
                     </tr>
       
                     <tr>
-                        <td>Created By</td>
+                        <td>Updated By</td>
                         <td> <?php echo $staff->getOperator();?></td>
                     </tr>
                     <tr>
@@ -132,52 +181,122 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <tr>
                         <td><input class="btn btn-primary pull-right" type="reset"
                             value="Reset"></td>
-                        <td><input class="btn btn-primary" type="submit" name="submit" value="Submit">
+                        <td><input class="btn btn-primary" type="submit" name="submit" value="Update Profile">
                         <!-- Insert Query Here -->
                         <?php
                         $error_message = "";
                         if (isset($_POST['submit'])){
-    
-                            $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
-                            $operator = mysqli_real_escape_string($mysqli, $_POST['operator']);
-                            $icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
-                            $notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
+                            $num_updated = 0;
+                            if ($_POST['fname'] != $row['fname']){
+                                $r_id = mysqli_real_escape_string($mysqli, $_POST['fname']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $r_id = $row['fname'];
+                            }
+                            if ($_POST['lname'] != $row['lname']){
+                                $r_id = mysqli_real_escape_string($mysqli, $_POST['lname']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $r_id = $row['lname'];
+                            }
+                            if ($_POST['phone'] != $row['phone']){
+                                $r_id = mysqli_real_escape_string($mysqli, $_POST['phone']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $r_id = $row['phone'];
+                            }
+                            if ($_POST['email'] != $row['email']){
+                                $r_id = mysqli_real_escape_string($mysqli, $_POST['email']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $r_id = $row['email'];
+                            }
+                            if ($_POST['address'] != $row['address']){
+                                $r_id = mysqli_real_escape_string($mysqli, $_POST['address']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $r_id = $row['address'];
+                            }
+                            if ($_POST['city'] != $row['city']){
+                                $r_id = mysqli_real_escape_string($mysqli, $_POST['city']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $r_id = $row['city'];
+                            }
+                            if ($_POST['state'] != $row['state']){
+                                $r_id = mysqli_real_escape_string($mysqli, $_POST['state']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $r_id = $row['state'];
+                            }
+                            if ($_POST['zip'] != $row['zip']){
+                                $r_id = mysqli_real_escape_string($mysqli, $_POST['zip']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $r_id = $row['zip'];
+                            }
 
+                            if ($_POST['icon'] != $row['icon']){
+                                $icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
+                                $num_updated += 1;
+                            }
+                            else{
+                                $icon = $row['icon'];
+                            }
+                            if ($_POST['notes'] != $row['notes']){
+                                $notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $notes = $row['notes'];
+                            }
+                            if ($_POST['r_id'] != $row['r_id']){
+                                $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
+                                $num_updated += 1;                            
+                            }
+                            else{
+                                $r_id = $row['r_id'];
+                            }
+                            $adj_date = date("Y-m-d h:i:s", time());
                             $_SESSION['popup'] = "";
                             $input_error = false;
     
                             # Error handling
-                            if(empty($r_id)||empty($operator)||empty($notes)){
-                                $_SESSION['popup'] .= "Make sure to complete all required fields.<br>";
-                                $input_error = true;
-                            }
-							if($operator == $staff->getOperator()){
-                                $_SESSION['popup'] .= "User is attempting to edit their own profile.<br>";
+                            if($num_updated == 0){
+                                $_SESSION['popup'] .= "You did not update anything.<br>";
                                 $input_error = true;
                             }
                             #Discuss other inputs with Jon, default expecting specific characters
-                            if(!preg_match("/^[0-9]*$/", $r_id)|| !preg_match("/^[0-9]*$/", $operator)|| !preg_match("/^[a-zA-Z]*$/", $icon)){
+                            if(!preg_match("/^[a-zA-Z]*$/", $fname) || !preg_match("/^[a-zA-Z]*$/", $lname) || !preg_match("/^[0-9]*$/", $phone) 
+                            || !preg_match("/^[a-zA-Z-0-9]*$/", $email) || !preg_match("/^[a-zA-Z-0-9]*$/", $address) || !preg_match("/^[a-zA-Z]*$/", $city) 
+                            || !preg_match("/^[a-zA-Z]*$/", $state) || !preg_match("/^[0-9]*$/", $zip) || !preg_match("/^[a-zA-Z]*$/", $icon) 
+                            || !preg_match("/^[a-zA-Z-0-9]*$/", $notes) || !preg_match("/^[0-9]*$/", $r_id)){
                                 $_SESSION['popup'] .= "Invalid symbols detected, make sure you are entering valid inputs.<br>";
                                 $input_error = true;
                             }
-                            #Make sure you're not entering a user with a repat 1000s number
-                            $sql = "SELECT * FROM users WHERE operator = '$operator'";
-                            $result = mysqli_query($mysqli, $sql);
-                            $resultCheck = mysqli_num_rows($result);
-                                    
-                            if($resultCheck>0){ 
-                                #if it's a repeat 1000s number, return to create user page with error message
-                                $_SESSION['popup'] .= "The user you attempted to add has a 1000s number already in the database.<br>";
-                                $input_error = true;
-                            }
+                          
                             # If there was no input error, then the query should be formatted correctly.
-                            if(!$input_error) {
-                                $sql = "INSERT INTO users (operator, r_id, icon, notes) VALUES ('$operator', '$r_id', '$icon', '$notes');";
-                                mysqli_query($mysqli, $sql);
-                                $_SESSION['popup'] = "Success";
+                            // if(!$input_error && $oncampus_user && !$offcampus_user) {
+                            //     $sql = "UPDATE `fabapp-v0.9`.`users` SET `icon` = '$icon', `notes` = '$notes' , `adj_date` = '$adj_date' WHERE `users`.`operator` = '$thisUser'";
+                            //     mysqli_query($mysqli, $sql);                                
+                            //     $_SESSION['popup'] = "Success";
+                            // }
+                            else if (!$input_error && !$oncampus_user && $offcampus_user){
+                                $sql = "UPDATE `fabapp-v0.9`.`offcampus` SET `fname` = '$fname', `lname` = '$lname',`phone` = '$phone',`email` = '$email',`address` = '$address',`city` = '$city',
+                                `state` = '$state',`zip` = '$zip',`icon` = '$icon', `notes` = '$notes' , `adj_date` = '$adj_date' WHERE `offcampus`.`operator` = '$thisUser'";
+                                mysqli_query($mysqli, $sql);                                
+                                // $_SESSION['popup'] = "Success";
                             }
 
-                            header("Location: ../manageUsers/editUser.php");
+                            header("Location: ../manageUsers/editUser.php?");
                             exit();
                         }
                         ?>
