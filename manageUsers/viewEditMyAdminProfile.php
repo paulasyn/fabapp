@@ -32,7 +32,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
 
 
 
-<title><?php echo $sv['site_name'];?>View/Edit My Admin Profile</title>
+<title><?php echo $sv['site_name'];?> View/Edit My Admin Profile</title>
 <!--echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, then I figured out how to make a popup.', false)}</script>";-->
 <div id="page-wrapper">
 <div class="row">
@@ -65,8 +65,12 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         if(mysqli_num_rows($result) == 0)
                         {
                             $result = $mysqli->query ("SELECT * FROM `offcampus` WHERE `operator` = $thisUser") or die("Bad Query: $result");
+                            $row = mysqli_fetch_array($result);
                         }
-                        $row = mysqli_fetch_array($result);
+                        else
+                        {
+                            $row = mysqli_fetch_array($result);
+                        }
                     ?>
                         <td>User ID</td>
                         <td>
@@ -130,8 +134,11 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <tr>
                         <td>Notes</td>
                         <td>
+                            <?php
+                                echo str_replace("\n", "<br>", $row['notes']);
+                            ?>
                             <div class="form-group">
-                            <input type="text" class = "form-control" name="notes" placeholder="Notes" value="<?php echo $row['notes'];?>" id="notesInput" disabled>
+                            <input type="text" class = "form-control" name="notes" placeholder="Add Notes" id="notesInput" disabled>
                         </td>
                     </tr>
 
@@ -168,21 +175,21 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 if (isset($_POST['submit'])){
                                     $num_updated = 0;
                                     
-                                    if ($_POST['icon'] != $row['icon']){
+                                    if ($_POST['icon'] != $row['icon'] && $_POST['icon'] != ""){
                                         $icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
                                         $num_updated += 1;
                                     }
                                     else{
                                         $icon = $row['icon'];
                                     }
-                                    if ($_POST['notes'] != $row['notes']){
-                                        $notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
+                                    if ($_POST['notes'] != ""){
+                                        $notes = $row['notes'] . trim(mysqli_real_escape_string($mysqli, $_POST['notes'])) . "\n";
                                         $num_updated += 1;                            
                                     }
                                     else{
                                         $notes = $row['notes'];
                                     }
-                                    if ($_POST['r_id'] != $row['r_id']){
+                                    if ($_POST['r_id'] != $row['r_id'] && $_POST['r_id'] != ""){
                                         $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
                                         $num_updated += 1;                            
                                     }
@@ -192,7 +199,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                     $adj_date = date("Y-m-d h:i:s", time());
                                     $_SESSION['popup'] = "";
                                     $input_error = false;
-            
+
                                     # Error handling
                                     if($num_updated == 0){
                                         $_SESSION['popup'] .= "You did not update anything.<br>";
@@ -200,7 +207,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                     }
                                     #Discuss other inputs with Jon, default expecting specific characters
                                     if(!preg_match("/^[0-9]*$/", $r_id) || !preg_match("/^[[:alpha:]](-|[[:alpha:]])*[[:alpha:]]$/", $icon)){
-                                        $_SESSION['popup'] .= "Invalid symbols detected, make sure you are entering valid inputs.<br>";
+                                        $_SESSION['popup'] .= "Invalid symbols detected, make sure you are entering valid inputs.<br>" . "Role:" . $r_id . ", Icon:" . $icon;
                                         $input_error = true;
                                     }
                                   
