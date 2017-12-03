@@ -86,9 +86,18 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 else
                                 {
                                     $currentDirectory = getcwd();
-                                    $lastSlashPos = strrpos($currentDirectory, "\\");
-                                    $baseDirectory = substr($currentDirectory, 0, $lastSlashPos);
-                                    $fontAwesomePath = $baseDirectory . "\\vendor\\font-awesome\\less\\icons.less";
+                                    if(strpos($currentDirectory, "\\") != false)
+                                    {
+                                        $lastSlashPos = strrpos($currentDirectory, "\\");
+                                        $baseDirectory = substr($currentDirectory, 0, $lastSlashPos);
+                                        $fontAwesomePath = $baseDirectory . "\\vendor\\font-awesome\\less\\icons.less";
+                                    }
+                                    else
+                                    {
+                                        $lastSlashPos = strrpos($currentDirectory, "/");
+                                        $baseDirectory = substr($currentDirectory, 0, $lastSlashPos);
+                                        $fontAwesomePath = $baseDirectory . "/vendor/font-awesome/less/icons.less";
+                                    }
                                     $iconFile = fopen($fontAwesomePath, "r") or die("Could not open file.");
 
                                     echo '<select class="form-control" name="iconSelector" id="iconSelector" onChange="changePreviewIcon()" required=true>';
