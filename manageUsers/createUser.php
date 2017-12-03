@@ -215,6 +215,10 @@ else {echo "<!-- The pop up window value was not set. -->";}
                             $input_error = false;
     
                             # Error handling
+                            if ($r_id < 7){
+                                $icon = "user";
+                            }
+
                             if(empty($r_id)||empty($operator)||empty($notes)){
                                 $_SESSION['popup'] .= "Make sure to complete all required fields.<br>";
                                 $input_error = true;
