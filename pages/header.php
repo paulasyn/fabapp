@@ -15,6 +15,7 @@
     <link href="/vendor/blackrock-digital/css/sb-admin-2.css?=v9" rel="stylesheet">
     <link href="/vendor/morrisjs/morris.css" rel="stylesheet">
     <link href="/vendor/font-awesome/css/font-awesome.min.css?=v1" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/vendor/fontawesome-iconpicker-1.3.1/dist/js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -157,6 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <i class="fa fa-<?php echo $staff->getIcon();?> fa-2x"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
+                        <li><a href="/manageUsers/viewEditMyAdminProfile.php"><i class="fa fa-user-circle-o fa-fw"></i> My Profile</a></li>
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
                         <li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stats</a></li>
                         <li class="divider"></li>
@@ -311,7 +313,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (is_object($staff) && $staff->getRoleID() < 6)  { 
  ?>
                         <li>
-                            <a href="/service/newTicket.php"><i class="fa fa-user fa-fw"></i> View My Profile </a>
+                            <a href="/manageUsers/viewEditMyAdminProfile.php"><i class="fa fa-user-circle-o fa-fw"></i> View My Profile</a>
                         </li>
 
 <?php } ?>

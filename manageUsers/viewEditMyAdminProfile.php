@@ -4,11 +4,15 @@
  *   FabApp V 0.9
  */
 include_once ($_SERVER['DOCUMENT_ROOT'].'/pages/header.php');
-if (!$staff || $staff->getRoleID() < 7){
+if(is_null($staff))
+{
+    header('Location: /index.php');
+}
+/*if (!$staff || $staff->getRoleID() < 7){
     //Not Authorized to see this Page
     header('Location: /index.php');
 	exit();
-}
+}*/
 /* Check for error from a previously submitted add user form.*/
 if(isset($_SESSION['popup'])){
     /* Handle appropriately*/
@@ -47,7 +51,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
         
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-user-circle-o fa-fw"></i> View/Edit Information
+                <i class="fa fa-user-circle-o fa-fw" id="myTemp"></i> View/Edit Information
             </div>
             <form name="saveMyProfile" method= "POST"> <!--onsubmit="return insertNewUser();"-->
 
@@ -66,10 +70,46 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     </tr>                    
                     
                     <tr>
-                        <td>Icon</td>
                         <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="icon" placeholder="Icon" value="<?php echo $row['icon'];?>">
+                            Icon<br>
+                            <?php
+                                if($row['r_id'] >= 7)
+                                    echo 'Preview: <i id="iconPreview" class="fa fa-' . $row['icon'] . ' fa-fw"></i>';
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                                if($row['r_id'] < 7)
+                                {
+                                    echo '<i class="fa fa-user fa-fw"></i>';
+                                }
+                                else
+                                {
+                                    $currentDirectory = getcwd();
+                                    $lastSlashPos = strrpos($currentDirectory, "\\");
+                                    $baseDirectory = substr($currentDirectory, 0, $lastSlashPos);
+                                    $fontAwesomePath = $baseDirectory . "\\vendor\\font-awesome\\less\\icons.less";
+                                    $iconFile = fopen($fontAwesomePath, "r") or die("Could not open file.");
+
+                                    echo '<select class="form-control" name="iconSelector" id="iconSelector" onChange="changePreviewIcon()" required=true>';
+                                    echo '<option value="">Select Icon</option>';
+                                    for ($fileLine = fgets($iconFile); $fileLine != false; $fileLine = fgets($iconFile))
+                                    { 
+                                        $unneededToken = strtok($fileLine, "}");
+                                        $iconName = strtok(":");
+                                        if($iconName == "")
+                                            continue;
+                                        $iconName = ltrim($iconName, " -");
+                                        $displayName = ucwords(str_replace("-", " ", $iconName));
+                                        //echo '<option value="' . $iconName . '"><i class="fa fa' . $iconName . ' fa-fw"></i></option>';
+                                        if(strcasecmp($iconName, $row['icon']) == 0)
+                                            echo '<option value="' . $iconName . '" selected>' . $displayName . '</option>';
+                                        else
+                                            echo '<option value="' . $iconName . '">' . $displayName . '</option>';
+                                    }
+                                    fclose($iconFile);
+                                }
+                            ?>
                         </td>
                     </tr>
 
@@ -86,8 +126,15 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <tr>
                         <td>Role ID</td>
                         <td>
-                            <div class="form-group">
-                            <input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID" value="<?php echo $row['r_id'];?>">
+                            <?php
+                                if($row['r_id'] < 7)
+                                    echo $row['r_id'];
+                                else
+                                {
+                                    echo '<div class="form-group">';
+                                    echo '<input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID" value="' . $row['r_id'] . '"">';
+                                }
+                            ?>
                         </td>
                     </tr>
                     
@@ -167,6 +214,14 @@ else {echo "<!-- The pop up window value was not set. -->";}
 </div>
 </div>
 <!-- /#page-wrapper -->
+
+<script type="text/javascript">
+    function changePreviewIcon()
+    {
+        var icon = document.getElementById("iconSelector").value;
+        document.getElementById("iconPreview").className = "fa fa-".concat(icon).concat(" fa-fw");
+    }
+</script>
 
 <?php
 //Standard call for dependencies
