@@ -51,10 +51,9 @@ else {echo "<!-- The pop up window value was not set. -->";}
         
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-user-circle-o fa-fw" id="myTemp"></i> View/Edit Information
+                <i class="fa fa-user-circle-o fa-fw"></i> View/Edit Information
             </div>
             <form name="saveMyProfile" method= "POST"> <!--onsubmit="return insertNewUser();"-->
-
                 <table class="table table-striped">
                     <tr>
                     <?php
@@ -66,10 +65,12 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         {
                             $result = $mysqli->query ("SELECT * FROM `offcampus` WHERE `operator` = $thisUser") or die("Bad Query: $result");
                             $row = mysqli_fetch_array($result);
+                            $oncampus = false;
                         }
                         else
                         {
                             $row = mysqli_fetch_array($result);
+                            $oncampus = true;
                         }
                     ?>
                         <td>User ID</td>
@@ -228,6 +229,36 @@ else {echo "<!-- The pop up window value was not set. -->";}
                 </table>
             </form>
         </div>
+
+        <?php
+            $result = $mysqli->query ("SELECT trainingmodule.title, trainingmodule.tm_desc, tm_enroll.completed FROM tm_enroll INNER JOIN trainingmodule ON tm_enroll.tm_id = trainingmodule.tm_id WHERE tm_enroll.operator = " . $thisUser) or die("Bad Query: $result");
+            if(mysqli_num_rows($result) == 0)
+                exit();
+            //$certificates = mysqli_fetch_array($result);
+        
+            echo '<div class="panel panel-default">';
+                echo '<div class="panel-heading">';
+                    echo '<i class="fa fa-list-alt fa-fw"></i> Training Certificates';
+                echo '</div>';
+                echo '<table class="table table-striped table-bordered table-hover" id="dataTables-example">';
+                    echo '<thread>';
+                        echo '<tr>';
+                            echo '<th>Training Name</th>';
+                            echo '<th>Description</th>';
+                            echo '<th>Date Completed</th>';
+                        echo '</tr>';
+                    echo '</thread>';
+                    while ($certificates = mysqli_fetch_array($result))
+                    {
+                        echo "<tr>";
+                            echo "<td>" . $certificates['title'] . "</td>";
+                            echo "<td>" . $certificates['tm_desc'] . "</td>";
+                            echo "<td>" . $certificates['completed'] . "</td>";
+                        echo "</tr>";
+                    }
+                echo '</table>';
+            echo '</div>';
+        ?>
     </div>
    
         <!-- /.col-md-4 -->
