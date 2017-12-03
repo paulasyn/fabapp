@@ -12,11 +12,11 @@ if (!$staff || $staff->getRoleID() < 7){
 if(isset($_SESSION['CCmsg'])){
 /* Handle appropriately*/
 	if($_SESSION['CCmsg'] == "Success"){ #User added successfully
-		echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully added.', false)}</script>";
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The citation was successfully submitted.', false)}</script>";
 	} elseif($_SESSION['CCmsg'] == "Field"){#Field has invalid characters
-		echo "<script type='text/javascript'> window.onload = function(){goModal('Symbol Error','Invalid symbols detected, make sure you are entering valid inputs.', false)}</script>";
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Symbol Error','Invalid symbols detected, make sure you are entering valid inputs.', true)}</script>";
 	} elseif($_SESSION['CCmsg'] == "Empty"){#Required field left empty
-		echo "<script type='text/javascript'> window.onload = function(){goModal('Empty Field','Make sure to complete all required fields.', false)}</script>";
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Empty Field','Make sure to complete all required fields.', true)}</script>";
 	}
 /*Unset the error value in case of refresh.*/
 unset($_SESSION['CCmsg']);
@@ -25,8 +25,6 @@ unset($_SESSION['CCmsg']);
 ?>
 <title><?php echo $sv['site_name'];?> Create Citation</title>
 
-<!--echo "<script type='text/javascript'> window.onload = function(){goModal('Create Citation','This is the page to create a citation.', true)}</script>";
-echo "<script type='text/javascript'> window.onload = function(){goModal('Test','This is a test for creating multiple popups.', true)}</script>";-->
 
 <div id="page-wrapper">
 <div class="row">
@@ -73,7 +71,18 @@ echo "<script type='text/javascript'> window.onload = function(){goModal('Test',
                     </td>
                     </tr>
                     
-                    
+                    <tr>
+                        <td>Severity<a title = "Required">*</a></td>
+                        <td>
+                        <label class="radio-inline">
+                        <input type="radio" name="userRadio" value="0" checked="checked">Low
+                        </label>
+                        <label class="radio-inline">
+                        <input type="radio" name="userRadio" value="1">High
+                        </div>
+                    </td>
+                    </tr>
+
                         <td>Current Date</td>
                         <td><?php echo $date = date("m/d/Y h:i a", time());?></td>
                     </tr>
