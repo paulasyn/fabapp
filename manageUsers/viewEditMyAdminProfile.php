@@ -17,7 +17,7 @@ if(is_null($staff))
 if(isset($_SESSION['popup'])){
     /* Handle appropriately*/
     if($_SESSION['popup'] == "Success"){ # User added successfully
-        echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully updated.', false)}</script>";
+        echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully updated.', true)}</script>";
     } elseif($_SESSION['popup'] == ""){# Check if the pop up message is empty. This only happens if the submit button was hit but nothing was added for the pop up message. This is unexpected behavior.
         echo "<script type='text/javascript'> window.onload = function(){goModal('Unknown Error','An unknown error occured while processing the request.', false)}</script>";
     } else {# An input error occured. Display what error(s) occured in a pop up.
@@ -58,10 +58,15 @@ else {echo "<!-- The pop up window value was not set. -->";}
                 <table class="table table-striped">
                     <tr>
                     <?php
-                    // $result = $mysqli->query ("SELECT * FROM `users`") or die("Bad Query: $result");
-                    $thisUser = $staff->getOperator();
-                    $result = $mysqli->query ("SELECT * FROM `users` WHERE `operator` = $thisUser") or die("Bad Query: $result");
-                    $row = mysqli_fetch_array($result);
+                        // $result = $mysqli->query ("SELECT * FROM `users`") or die("Bad Query: $result");
+                        $thisUser = $staff->getOperator();
+                        $result = $mysqli->query ("SELECT * FROM `users` WHERE `operator` = $thisUser") or die("Bad Query: $result");
+                        // Check if the user was found in the on campus user table. If they were not found there, search the off campus users.
+                        if(mysqli_num_rows($result) == 0)
+                        {
+                            $result = $mysqli->query ("SELECT * FROM `offcampus` WHERE `operator` = $thisUser") or die("Bad Query: $result");
+                        }
+                        $row = mysqli_fetch_array($result);
                     ?>
                         <td>User ID</td>
                         <td>
@@ -100,7 +105,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                     }
                                     $iconFile = fopen($fontAwesomePath, "r") or die("Could not open file.");
 
-                                    echo '<select class="form-control" name="iconSelector" id="iconSelector" onChange="changePreviewIcon()" required=true>';
+                                    echo '<select class="form-control" name="icon" id="iconSelector" onChange="changePreviewIcon()" required=true disabled>';
                                     echo '<option value="">Select Icon</option>';
                                     for ($fileLine = fgets($iconFile); $fileLine != false; $fileLine = fgets($iconFile))
                                     { 
@@ -126,7 +131,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <td>Notes</td>
                         <td>
                             <div class="form-group">
-                            <input type="text" class = "form-control" name="notes" placeholder="Notes" value="<?php echo $row['notes'];?>">
+                            <input type="text" class = "form-control" name="notes" placeholder="Notes" value="<?php echo $row['notes'];?>" id="notesInput" disabled>
                         </td>
                     </tr>
 
@@ -141,7 +146,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 else
                                 {
                                     echo '<div class="form-group">';
-                                    echo '<input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID" value="' . $row['r_id'] . '"">';
+                                    echo '<input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID" value="' . $row['r_id'] . '" id="roleIDinput" disabled>';
                                 }
                             ?>
                         </td>
@@ -152,63 +157,65 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <td><?php echo $date = date("m/d/Y h:i a", time());?></td>
                     </tr>
                     <tr>
-                        <td><input class="btn btn-primary pull-right" type="reset"
-                            value="Reset"></td>
-                        <td><input class="btn btn-primary" type="submit" name="submit" value="Update Profile">
-                        <!-- Insert Query Here -->
-                        <?php
-                        $error_message = "";
-                        if (isset($_POST['submit'])){
-                            $num_updated = 0;
-                            
-                            if ($_POST['icon'] != $row['icon']){
-                                $icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
-                                $num_updated += 1;
-                            }
-                            else{
-                                $icon = $row['icon'];
-                            }
-                            if ($_POST['notes'] != $row['notes']){
-                                $notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $notes = $row['notes'];
-                            }
-                            if ($_POST['r_id'] != $row['r_id']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['r_id'];
-                            }
-                            $adj_date = date("Y-m-d h:i:s", time());
-                            $_SESSION['popup'] = "";
-                            $input_error = false;
-    
-                            # Error handling
-                            if($num_updated == 0){
-                                $_SESSION['popup'] .= "You did not update anything.<br>";
-                                $input_error = true;
-                            }
-                            #Discuss other inputs with Jon, default expecting specific characters
-                            if(!preg_match("/^[0-9]*$/", $r_id) || !preg_match("/^[a-zA-Z]*$/", $icon)){
-                                $_SESSION['popup'] .= "Invalid symbols detected, make sure you are entering valid inputs.<br>";
-                                $input_error = true;
-                            }
-                          
-                            # If there was no input error, then the query should be formatted correctly.
-                            if(!$input_error) {
-                                $sql = "UPDATE `fabapp-v0.9`.`users` SET `icon` = '$icon', `notes` = '$notes' , `adj_date` = '$adj_date' WHERE `users`.`operator` = '$thisUser'";
-                                mysqli_query($mysqli, $sql);                                
-                                $_SESSION['popup'] = "Success";
-                                
-                            }
+                        <td></td>
+                        <td>
+                            <input class="btn btn-primary" type="reset" value="Reset" readonly>
+                            <input class="btn btn-primary" type="submit" name="submit" value="Update Profile" readonly>
+                            <input class="btn btn-primary" type="toggleEditing" name="toggleEditing" value="Toggle Editing" onclick="toggleInputs()" readonly>
+                            <!-- Insert Query Here -->
+                            <?php
+                                $error_message = "";
+                                if (isset($_POST['submit'])){
+                                    $num_updated = 0;
+                                    
+                                    if ($_POST['icon'] != $row['icon']){
+                                        $icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
+                                        $num_updated += 1;
+                                    }
+                                    else{
+                                        $icon = $row['icon'];
+                                    }
+                                    if ($_POST['notes'] != $row['notes']){
+                                        $notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
+                                        $num_updated += 1;                            
+                                    }
+                                    else{
+                                        $notes = $row['notes'];
+                                    }
+                                    if ($_POST['r_id'] != $row['r_id']){
+                                        $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
+                                        $num_updated += 1;                            
+                                    }
+                                    else{
+                                        $r_id = $row['r_id'];
+                                    }
+                                    $adj_date = date("Y-m-d h:i:s", time());
+                                    $_SESSION['popup'] = "";
+                                    $input_error = false;
+            
+                                    # Error handling
+                                    if($num_updated == 0){
+                                        $_SESSION['popup'] .= "You did not update anything.<br>";
+                                        $input_error = true;
+                                    }
+                                    #Discuss other inputs with Jon, default expecting specific characters
+                                    if(!preg_match("/^[0-9]*$/", $r_id) || !preg_match("/^[[:alpha:]](-|[[:alpha:]])*[[:alpha:]]$/", $icon)){
+                                        $_SESSION['popup'] .= "Invalid symbols detected, make sure you are entering valid inputs.<br>";
+                                        $input_error = true;
+                                    }
+                                  
+                                    # If there was no input error, then the query should be formatted correctly.
+                                    if(!$input_error) {
+                                        $sql = "UPDATE `fabapp-v0.9`.`users` SET `icon` = '$icon', `notes` = '$notes' , `adj_date` = '$adj_date' WHERE `users`.`operator` = '$thisUser'";
+                                        mysqli_query($mysqli, $sql);                                
+                                        $_SESSION['popup'] = "Success";
+                                        
+                                    }
 
-                            header("Location: ../manageUsers/viewEditMyAdminProfile.php");
-                            exit();
-                        }
-                        ?>
+                                    header("Location: ../manageUsers/viewEditMyAdminProfile.php");
+                                    exit();
+                                }
+                            ?>
                         </td>
                     </tr>
                 </table>
@@ -229,6 +236,21 @@ else {echo "<!-- The pop up window value was not set. -->";}
     {
         var icon = document.getElementById("iconSelector").value;
         document.getElementById("iconPreview").className = "fa fa-".concat(icon).concat(" fa-fw");
+    }
+</script>
+<script type="text/javascript">
+    function toggleInputs()
+    {
+        var iconSelector = document.getElementById("iconSelector");
+        var notesInput = document.getElementById("notesInput");
+        var roleIDinput = document.getElementById("roleIDinput");
+
+        if(iconSelector != null)
+            iconSelector.disabled = !iconSelector.disabled;
+        if (notesInput != null)
+            notesInput.disabled = !notesInput.disabled;
+        if(roleIDinput != false)
+            roleIDinput.disabled = !roleIDinput.disabled;
     }
 </script>
 
