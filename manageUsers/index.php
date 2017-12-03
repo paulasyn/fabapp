@@ -68,17 +68,12 @@ else {echo "<!-- The pop up window value was not set. -->";}
                             <td><i class="fa fa-<?php echo $row['icon'];?> fa-lg"></i></td>
                             <td><?php echo $row['operator']; ?></td>
                             <?php $op = $row['operator']; ?>
-                            <?php if ($staff) { $_SESSION['op'][$op] = $op;?> <td><a href="/manageUsers/editUsers.php?operator=<?php echo $op;?>">Edit Profile</a></td><?php } ?>
-                            <!-- Create $_SESSION array of all operators. In editUsers.php, check that $_SESSION['op'][$_GET[operator]] is set.
-							if it is, then the user navigated from this page, and the operator existed in the table. If not, then the user
-							manually entered operator into the table, and the input should be ignored for sql safety. In the case that the user
-							manually entered an operator that does exist through the address bar, it will be ignored as $_SESSION['op']
-							will be unset by the time the page is refreshed. The user should have no reason to enter the operator through
-							the address bar. The operator value passed through href is strictly to be used for checking the operator that is
-							meant to be edited, and that it was accessed through the edit user link in the table created above. It should never 
-							directly affect a SQL query.
-							If possible, look for a more efficient solution, as large user tables would mean a large number of values in the session array.
-							However, this solution works, and, to the knowledge of the team, works securely.-->
+                            <?php if ($staff) {?> 
+							<td><form action="/manageUsers/editUsers" method="post">
+                                <button type="submit" name="operator" value=<?php echo $op?> class="btn-link">Edit User</button>
+                            </form></td>
+						    <?php } ?>
+                            
                             <td>
                             <div class="col-md-3 text-center"> 
                                 <a onclick="<?php $_SESSION['popup'] = "Delete";?>" href="?operator=<?php echo $row['operator']?>" class="btn btn-danger">Delete User</button>
@@ -145,17 +140,11 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <td><i class="fa fa-<?php echo $row['icon'];?> fa-lg"></i></td>
                         <td><?php echo $row['operator']; ?></td>
                         <?php $op = $row['operator']; ?>
-                        <?php if ($staff) { $_SESSION['op'][$op] = $op;?> <td><a href="/manageUsers/editUsers.php?operator=<?php echo $op;?>">Edit Profile</a></td><?php } ?>
-                        <!-- Create $_SESSION array of all operators. In editUsers.php, check that $_SESSION['op'][$_GET[operator]] is set.
-                        if it is, then the user navigated from this page, and the operator existed in the table. If not, then the user
-                        manually entered operator into the table, and the input should be ignored for sql safety. In the case that the user
-                        manually entered an operator that does exist through the address bar, it will be ignored as $_SESSION['op']
-                        will be unset by the time the page is refreshed. The user should have no reason to enter the operator through
-                        the address bar. The operator value passed through href is strictly to be used for checking the operator that is
-                        meant to be edited, and that it was accessed through the edit user link in the table created above. It should never 
-                        directly affect a SQL query.
-                        If possible, look for a more efficient solution, as large user tables would mean a large number of values in the session array.
-                        However, this solution works, and, to the knowledge of the team, works securely.-->
+                        <?php if ($staff) {?> 
+							<td><form action="/manageUsers/editUsers" method="post">
+                                <button type="submit" name="operator" value=<?php echo $op?> class="btn-link">Edit User</button>
+                            </form></td>
+						    <?php } ?>
                         <td>
                         <div class="col-md-3 text-center"> 
                             <button id="deleteOffButton" name="button" class="btn btn-primary">Delete User</button>
