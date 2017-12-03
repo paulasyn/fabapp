@@ -233,21 +233,22 @@ else {echo "<!-- The pop up window value was not set. -->";}
         <?php
             $result = $mysqli->query ("SELECT trainingmodule.title, trainingmodule.tm_desc, tm_enroll.completed FROM tm_enroll INNER JOIN trainingmodule ON tm_enroll.tm_id = trainingmodule.tm_id WHERE tm_enroll.operator = " . $thisUser) or die("Bad Query: $result");
             if(mysqli_num_rows($result) == 0)
-                exit();
-            //$certificates = mysqli_fetch_array($result);
+                goto trainingEnd;
+        ?>
         
-            echo '<div class="panel panel-default">';
-                echo '<div class="panel-heading">';
-                    echo '<i class="fa fa-list-alt fa-fw"></i> Training Certificates';
-                echo '</div>';
-                echo '<table class="table table-striped table-bordered table-hover" id="dataTables-example">';
-                    echo '<thread>';
-                        echo '<tr>';
-                            echo '<th>Training Name</th>';
-                            echo '<th>Description</th>';
-                            echo '<th>Date Completed</th>';
-                        echo '</tr>';
-                    echo '</thread>';
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list-alt fa-fw"></i> Training Certificates
+            </div>
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thread>
+                    <tr>
+                        <th>Training Name</th>
+                        <th>Description</th>
+                        <th>Date Completed</th>
+                    </tr>
+                </thread>
+                <?php
                     while ($certificates = mysqli_fetch_array($result))
                     {
                         echo "<tr>";
@@ -256,9 +257,10 @@ else {echo "<!-- The pop up window value was not set. -->";}
                             echo "<td>" . $certificates['completed'] . "</td>";
                         echo "</tr>";
                     }
-                echo '</table>';
-            echo '</div>';
-        ?>
+                ?>
+            </table>
+        </div>
+        <?php trainingEnd: ?>
     </div>
    
         <!-- /.col-md-4 -->
