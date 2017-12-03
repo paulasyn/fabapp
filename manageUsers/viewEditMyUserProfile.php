@@ -67,10 +67,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     
                     <tr>
                         <td>Icon</td>
-                        <td>
-                            <div class="form-group">
-                            <input type="text" class = "form-control" name="icon" placeholder="Icon" value="<?php echo $row['icon'];?>">
-                        </td>
+                        <td><i class="fa fa-<?php echo $row['icon'];?> fa-lg"></i></td>
                     </tr>
 
                     <tr>
@@ -104,14 +101,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         $error_message = "";
                         if (isset($_POST['submit'])){
                             $num_updated = 0;
-                            
-                            if ($_POST['icon'] != $row['icon']){
-                                $icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
-                                $num_updated += 1;
-                            }
-                            else{
-                                $icon = $row['icon'];
-                            }
+                    
                             if ($_POST['notes'] != $row['notes']){
                                 $notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
                                 $num_updated += 1;                            

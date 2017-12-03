@@ -66,7 +66,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     </tr>                    
                     
                     <tr>
-                        <td>Icon</td>
+                        <td>Icon <i class="fa fa-<?php echo $row['icon'];?> fa-lg"></i></td>
                         <td>
                             <div class="form-group">
                             <input type="text" class = "form-control" name="icon" placeholder="Icon" value="<?php echo $row['icon'];?>">

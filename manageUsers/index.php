@@ -34,6 +34,7 @@ if (!$staff || $staff->getRoleID() < 7){
                         <th>Icon</th>
                         <th>UserID</th>
                         <th>Edit</th>
+                        <th>Delete</th>
                       
                     </tr>
                     </thead>
@@ -60,6 +61,7 @@ if (!$staff || $staff->getRoleID() < 7){
 							directly affect a SQL query.
 							If possible, look for a more efficient solution, as large user tables would mean a large number of values in the session array.
 							However, this solution works, and, to the knowledge of the team, works securely.-->
+                            <td><a href="#">Delete User</a></td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -99,6 +101,7 @@ if (!$staff || $staff->getRoleID() < 7){
                         <th>Icon</th>
                         <th>UserID</th>
                         <th>Edit</th>
+                        <th>Delete</th>
                       
                     </tr>
                     </thead>
@@ -123,7 +126,8 @@ if (!$staff || $staff->getRoleID() < 7){
                         directly affect a SQL query.
                         If possible, look for a more efficient solution, as large user tables would mean a large number of values in the session array.
                         However, this solution works, and, to the knowledge of the team, works securely.-->
-                    </tr>
+                        <td><a href="#">Delete User</a></td>
+                        </tr>
                     <?php } ?>
                     </tbody>
                 </table>              
