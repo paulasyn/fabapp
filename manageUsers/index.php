@@ -83,8 +83,6 @@ else {echo "<!-- The pop up window value was not set. -->";}
                 <div class="panel-body">
                     <a href="/manageUsers/createUser.php">Create a new user</a>
                     <p></p>
-                    <a href="/manageUsers/editUsers.php">Edit a user</a>
-                    <p></p>
 
                     <a href="/manageUsers/myProfile.php">View/Edit My Profile</a>
                 </div>

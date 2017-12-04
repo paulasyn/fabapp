@@ -154,7 +154,41 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <td>Icon</td>
                         <td>
                             <div class="form-group">
-                            <input type="text" class = "form-control" name="icon">
+                            <?php
+					
+                                $currentDirectory = getcwd();
+                                if(strpos($currentDirectory, "\\") != false)
+                                {
+                                    $lastSlashPos = strrpos($currentDirectory, "\\");
+                                    $baseDirectory = substr($currentDirectory, 0, $lastSlashPos);
+                                    $fontAwesomePath = $baseDirectory . "\\vendor\\font-awesome\\less\\icons.less";
+                                }
+                                else
+                                {
+                                    $lastSlashPos = strrpos($currentDirectory, "/");
+                                    $baseDirectory = substr($currentDirectory, 0, $lastSlashPos);
+                                    $fontAwesomePath = $baseDirectory . "/vendor/font-awesome/less/icons.less";
+                                }
+                                $iconFile = fopen($fontAwesomePath, "r") or die("Could not open file.");
+
+                                echo '<select class="form-control" name="icon" id="iconSelector" onChange="changePreviewIcon()" required=true >';
+                                echo '<option value="">Select Icon</option>';
+                                for ($fileLine = fgets($iconFile); $fileLine != false; $fileLine = fgets($iconFile))
+                                { 
+                                    $unneededToken = strtok($fileLine, "}");
+                                    $iconName = strtok(":");
+                                    if($iconName == "")
+                                        continue;
+                                    $iconName = ltrim($iconName, " -");
+                                    $displayName = ucwords(str_replace("-", " ", $iconName));
+                                    //echo '<option value="' . $iconName . '"><i class="fa fa' . $iconName . ' fa-fw"></i></option>';
+                                    if(strcasecmp($iconName, $row['icon']) == 0)
+                                        echo '<option value="' . $iconName . '" selected>' . $displayName . '</option>';
+                                    else
+                                        echo '<option value="' . $iconName . '">' . $displayName . '</option>';
+                                }
+                                fclose($iconFile);
+                            ?>
                         </td>
                     </tr>
 

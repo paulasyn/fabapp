@@ -86,18 +86,12 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         
                         <tr>
                             <td>
-                                Icon<br>
-                                <?php
-                                    if($row['r_id'] >= 7)
-                                        echo 'Preview: <i id="iconPreview" class="fa fa-' . $row['icon'] . ' fa-fw"></i>';
-                                ?>
+                                Icon
                             </td>
                             <td>
                                 <?php
-                                    if($row['r_id'] < 7)
-                                    {
-                                        echo '<i class="fa fa-user fa-fw"></i>';
-                                    }
+                                    if(($row['r_id'] >= 7) && !(($row['icon'] == "user") || ($row['icon'] == NULL)))
+                                    echo 'Preview: <i id="iconPreview" class="fa fa-' . $row['icon'] . ' fa-fw"></i>';
                                     else
                                     {
                                         $currentDirectory = getcwd();
