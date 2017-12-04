@@ -81,7 +81,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
             </div>
         </div>
          <!-- /.col-md-8 -->
-         <div class="col-lg-4">
+        <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-user-circle-o fa-fw"></i> User Options
