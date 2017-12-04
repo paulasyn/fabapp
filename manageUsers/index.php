@@ -52,7 +52,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <th>Icon</th>
                         <th>UserID</th>
                         <th>Edit</th>
-                        <th>Delete</th>
+                        
                       
                     </tr>
                     </thead>
@@ -73,20 +73,6 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 <button type="submit" name="operator" value=<?php echo $op?> class="btn-link">Edit User</button>
                             </form></td>
 						    <?php } ?>
-                            
-                            <td>
-                            <div class="col-md-3 text-center"> 
-                                <a onclick="<?php $_SESSION['popup'] = "Delete";?>" href="?operator=<?php echo $row['operator']?>" class="btn btn-danger">Delete User</button>
-                                <?php
-                                
-                                    // $op = $_POST['operator'];  
-                                    // $sql = "DELETE FROM `fabapp-v0.9`.`users` WHERE `users`.`operator` = $row['operator']";
-                                    // $result = mysqli_query($mysqli, $sql);
-                                    // $_SESSION['popup'] = "Deleted User: $op";
-                                
-                                ?>
-                            </div>
-                            </td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -106,7 +92,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <a href="/manageUsers/editUsers.php">Edit a user</a>
                     <p></p>
 
-                    <a href="/manageUsers/viewEditMyAdminProfile.php">View/Edit My Profile</a>
+                    <a href="/manageUsers/myProfile.php">View/Edit My Profile</a>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -126,8 +112,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <th>Icon</th>
                         <th>UserID</th>
                         <th>Edit</th>
-                        <th>Delete</th>
-                      
+        
                     </tr>
                     </thead>
                     <?php
@@ -145,12 +130,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 <button type="submit" name="operator" value=<?php echo $op?> class="btn-link">Edit User</button>
                             </form></td>
 						    <?php } ?>
-                        <td>
-                        <div class="col-md-3 text-center"> 
-                            <button id="deleteOffButton" name="button" class="btn btn-primary">Delete User</button>
-
-                        </div>
-                        </td></tr>
+                       </tr>
                     <?php } ?>
                     </tbody>
                 </table>              

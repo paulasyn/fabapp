@@ -13,7 +13,7 @@ if (!$staff || $staff->getRoleID() < 7){
 if(isset($_SESSION['popup'])){
     /* Handle appropriately*/
     if($_SESSION['popup'] == "Success"){ # User added successfully
-        echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully added.', false)}</script>";
+        echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The user was successfully added.', true)}</script>";
     } elseif($_SESSION['popup'] == ""){# Check if the pop up message is empty. This only happens if the submit button was hit but nothing was added for the pop up message. This is unexpected behavior.
         echo "<script type='text/javascript'> window.onload = function(){goModal('Unknown Error','An unknown error occured while processing the request.', true)}</script>";
     }elseif($_SESSION['popup'] == "Table did not update"){# Check if the pop up message is empty. This only happens if the submit button was hit but nothing was added for the pop up message. This is unexpected behavior.
