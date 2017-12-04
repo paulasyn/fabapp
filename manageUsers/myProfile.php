@@ -36,7 +36,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
 <!--echo "<script type='text/javascript'> window.onload = function(){goModal('Did this work?','If you can see this message, then I figured out how to make a popup.', false)}</script>";-->
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-10">
             <h1 class="page-header">View/Edit My Profile</h1>
         </div>
         <!-- /.col-lg-12 -->
@@ -53,7 +53,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-lg-10">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-user-circle-o fa-fw"></i> View/Edit Information
@@ -86,18 +86,12 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         
                         <tr>
                             <td>
-                                Icon<br>
-                                <?php
-                                    if($row['r_id'] >= 7)
-                                        echo 'Preview: <i id="iconPreview" class="fa fa-' . $row['icon'] . ' fa-fw"></i>';
-                                ?>
+                                Icon
                             </td>
                             <td>
                                 <?php
-                                    if($row['r_id'] < 7)
-                                    {
-                                        echo '<i class="fa fa-user fa-fw"></i>';
-                                    }
+                                    if(($row['r_id'] >= 7) && !(($row['icon'] == "user") || ($row['icon'] == NULL)))
+                                    echo 'Preview: <i id="iconPreview" class="fa fa-' . $row['icon'] . ' fa-fw"></i>';
                                     else
                                     {
                                         $currentDirectory = getcwd();
@@ -221,26 +215,14 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         </tr>
                     </table>
                 </form>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-calendar fa-fw"></i> Membership End Date
-                </div>
-                <div class="panel-body" style="text-align:center; font-size:x-large">
-                    <?php
-                        $result = $mysqli->query ("SELECT users.exp_date FROM users WHERE users.operator = " . $thisUser);
-                        $expiration = mysqli_fetch_array($result);
-                        if($expiration['exp_date'] == "")
-                            echo "Indefinite";
-                        else
-                            echo $expiration['exp_date'];
-                    ?>
-                </div>
-            </div>
-        </div>
+        
+        <?php
+            $result = $mysqli->query ("SELECT trainingmodule.title, trainingmodule.tm_desc, tm_enroll.completed FROM tm_enroll INNER JOIN trainingmodule ON tm_enroll.tm_id = trainingmodule.tm_id WHERE tm_enroll.operator = " . $thisUser) or die("Bad Query: $result");
+            if(mysqli_num_rows($result) == 0)
+                goto certificatesEnd;
+        ?>
     </div>
+    
 
 
     <?php
@@ -249,45 +231,44 @@ else {echo "<!-- The pop up window value was not set. -->";}
             goto certificatesEnd;
     ?>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-vcard-o fa-fw"></i> Training Certificates
+        <div class = "row">                                
+            <div class="col-lg-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-vcard-o fa-fw"></i> Training Certificates
+                    </div>
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thread>
+                            <tr>
+                                <th>Training Name</th>
+                                <th>Description</th>
+                                <th>Date Completed</th>
+                            </tr>
+                        </thread>
+                        <?php
+                            while ($certificates = mysqli_fetch_array($result))
+                            {
+                                echo "<tr>";
+                                    echo "<td>" . $certificates['title'] . "</td>";
+                                    echo "<td>" . $certificates['tm_desc'] . "</td>";
+                                    echo "<td>" . $certificates['completed'] . "</td>";
+                                echo "</tr>";
+                            }
+                        ?>
+                    </table>
                 </div>
-                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                    <thread>
-                        <tr>
-                            <th>Training Name</th>
-                            <th>Description</th>
-                            <th>Date Completed</th>
-                        </tr>
-                    </thread>
-                    <?php
-                        while ($certificates = mysqli_fetch_array($result))
-                        {
-                            echo "<tr>";
-                                echo "<td>" . $certificates['title'] . "</td>";
-                                echo "<td>" . $certificates['tm_desc'] . "</td>";
-                                echo "<td>" . $certificates['completed'] . "</td>";
-                            echo "</tr>";
-                        }
-                    ?>
-                </table>
             </div>
         </div>
-    </div>
-    <?php certificatesEnd: ?>
+        <?php certificatesEnd: ?>
+    
 
-
-    <?php
+        <?php
         $result = $mysqli->query ("SELECT tm_enroll.operator, trainingmodule.title, trainingmodule.tm_desc FROM tm_enroll RIGHT JOIN trainingmodule ON tm_enroll.tm_id = trainingmodule.tm_id AND tm_enroll.operator = " . $thisUser) or die("Bad Query: $result");
         if(mysqli_num_rows($result) == 0)
             goto availableTrainingEnd;
-    ?>
-
-    <div class="row">
-        <div class="col-md-8">
+        ?>
+        <div class = "row">
+        <div class="col-lg-10">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-list-alt fa-fw"></i> Available Training
@@ -317,10 +298,53 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     ?>
                 </table>
             </div>
+        </div> 
+    </div>
+        <?php availableTrainingEnd: ?>
+
+<!-- /.col-md-4 -->
+
+
+        <div class = "row">
+            <div class="col-lg-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-flag fa-fw" style="color:red"></i> Citations
+                    </div>
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Issued By</th>
+                                <th>Notes</th>
+                                <th>Severity</th>       
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $result = $mysqli->query ("SELECT `c_date`, `staff_id`, `c_notes`, `severity` FROM `citation` WHERE `operator` = $thisUser") or die("Bad Query: $result");
+                            while ($row = mysqli_fetch_array($result)) { ?>
+                                <tr>
+                                    <td><?php echo $row['c_date'];?></td>
+                                    <td><?php echo $row['staff_id']; ?></td>
+                                    <td><?php echo $row['c_notes'];?></td>
+                                    <td><?php 
+                                        if($row['severity'] == 0){?>
+                                            <i class="fa fa-flag fa-fw" style="color:green">
+                                        <?php } 
+                                        else {?> 
+                                            <i class="fa fa-flag fa-fw" style="color:red">
+                                    <?php }                   
+                                    ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>              
+                </div>
+            </div>
         </div>
     </div>
-    <?php availableTrainingEnd: ?>
-
+</div>
 </div>
 <!-- /#page-wrapper -->
 

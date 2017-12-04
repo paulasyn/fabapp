@@ -158,7 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <i class="fa fa-<?php echo $staff->getIcon();?> fa-2x"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="/manageUsers/myProfile.php"><i class="fa fa-user-circle-o fa-fw"></i> My Profile</a></li>
+                        <li><a href="/manageUsers/myProfile.php"><i class="fa fa-<?php echo $staff->getIcon();?> fa-fw"></i> My Profile</a></li>
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
                         <li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Stats</a></li>
                         <li class="divider"></li>
@@ -309,14 +309,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="/manageUsers/myProfile.php"><i class="fa fa-user-circle-o fa-fw"></i> View My Profile</a>
+                            <a href="/manageUsers/myProfile.php"><i class="fa fa-<?php echo $staff->getIcon();?>  fa-fw"></i> View My Profile</a>
                         </li>
 
 <?php }
     if (is_object($staff) && $staff->getRoleID() < 6)  { 
  ?>
                         <li>
-                            <a href="/manageUsers/myProfile.php"><i class="fa fa-user-circle-o fa-fw"></i> View My Profile</a>
+                            <a href="/manageUsers/myProfile.php"><i class="fa fa-<i class="fa fa-<?php echo $staff->getIcon();?>  fa-fw"></i> View My Profile</a>
                         </li>
 
 <?php } ?>

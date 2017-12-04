@@ -45,31 +45,25 @@ else {echo "<!-- The pop up window value was not set. -->";}
                 <div class="panel-heading">
                     <i class="fa fa-user-circle-o fa-fw"></i> Manage On Campus Users
                 </div>
-                <div class="panel-body">    
+                   
                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
                     <tr>
                         <th>Icon</th>
                         <th>UserID</th>
-                        <th>Edit</th>
-                        
-                      
+                        <th>Edit</th>  
                     </tr>
                     </thead>
-                    <?php
-
-                    $result = $mysqli->query ("SELECT `operator`, `icon` FROM `users` WHERE 1 ORDER BY `operator` ASC") or die("Bad Query: $result");
-                    ?>
                     <tbody>
                     <?php 
-					$i = 0; 
+                    $result = $mysqli->query ("SELECT `operator`, `icon` FROM `users` WHERE 1 ORDER BY `operator` ASC") or die("Bad Query: $result");             
 					while ($row = mysqli_fetch_array($result)) { ?>
                         <tr>
                             <td><i class="fa fa-<?php echo $row['icon'];?> fa-lg"></i></td>
                             <td><?php echo $row['operator']; ?></td>
                             <?php $op = $row['operator']; ?>
                             <?php if ($staff) {?> 
-							<td><form action="/manageUsers/editUsers" method="post">
+							<td><form action="/manageUsers/editUsers.php" method="post">
                                 <button type="submit" name="operator" value=<?php echo $op?> class="btn-link">Edit User</button>
                             </form></td>
 						    <?php } ?>
@@ -77,7 +71,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <?php } ?>
                     </tbody>
                 </table>              
-                </div>
+               
             </div>
         </div>
          <!-- /.col-md-8 -->
@@ -88,8 +82,6 @@ else {echo "<!-- The pop up window value was not set. -->";}
                 </div>
                 <div class="panel-body">
                     <a href="/manageUsers/createUser.php">Create a new user</a>
-                    <p></p>
-                    <a href="/manageUsers/editUsers.php">Edit a user</a>
                     <p></p>
 
                     <a href="/manageUsers/myProfile.php">View/Edit My Profile</a>
@@ -105,7 +97,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                 <div class="panel-heading">
                     <i class="fa fa-user-circle-o fa-fw"></i> Manage Off Campus Users
                 </div>
-                <div class="panel-body">    
+                 
                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
                     <tr>
@@ -126,7 +118,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <td><?php echo $row['operator']; ?></td>
                         <?php $op = $row['operator']; ?>
                         <?php if ($staff) {?> 
-							<td><form action="/manageUsers/editUsers" method="post">
+							<td><form action="/manageUsers/editUsers.php" method="post">
                                 <button type="submit" name="operator" value=<?php echo $op?> class="btn-link">Edit User</button>
                             </form></td>
 						    <?php } ?>
@@ -134,7 +126,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                     <?php } ?>
                     </tbody>
                 </table>              
-                </div>
+                
             </div>
         </div>
     </div>
