@@ -53,7 +53,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
     </div>
 
     <div class="row">
-        <div class="col-lg-10">
+        <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-user-circle-o fa-fw"></i> View/Edit Information
@@ -215,12 +215,26 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         </tr>
                     </table>
                 </form>
+            </div>
+        </div>
         
-        <?php
-            $result = $mysqli->query ("SELECT trainingmodule.title, trainingmodule.tm_desc, tm_enroll.completed FROM tm_enroll INNER JOIN trainingmodule ON tm_enroll.tm_id = trainingmodule.tm_id WHERE tm_enroll.operator = " . $thisUser) or die("Bad Query: $result");
-            if(mysqli_num_rows($result) == 0)
-                goto certificatesEnd;
-        ?>
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-calendar fa-fw"></i> Membership End Date
+                </div>
+                <div class="panel-body" style="text-align:center; font-size:x-large">
+                    <?php
+                        $result = $mysqli->query ("SELECT users.exp_date FROM users WHERE users.operator = " . $thisUser);
+                        $expiration = mysqli_fetch_array($result);
+                        if($expiration['exp_date'] == "")
+                            echo "Indefinite";
+                        else
+                            echo $expiration['exp_date'];
+                    ?>
+                </div>
+            </div>
+        </div>
     </div>
     
 
@@ -232,7 +246,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
     ?>
 
         <div class = "row">                                
-            <div class="col-lg-10">
+            <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="fa fa-vcard-o fa-fw"></i> Training Certificates
@@ -268,7 +282,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
             goto availableTrainingEnd;
         ?>
         <div class = "row">
-        <div class="col-lg-10">
+        <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-list-alt fa-fw"></i> Available Training
@@ -306,7 +320,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
 
 
         <div class = "row">
-            <div class="col-lg-10">
+            <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <i class="fa fa-flag fa-fw" style="color:red"></i> Citations
