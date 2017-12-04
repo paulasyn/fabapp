@@ -12,7 +12,7 @@ if (!$staff || $staff->getRoleID() < 7){
 if(isset($_SESSION['CCmsg'])){
 /* Handle appropriately*/
 	if($_SESSION['CCmsg'] == "Success"){ #User added successfully
-		echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The citation was successfully submitted.', false)}</script>";
+		echo "<script type='text/javascript'> window.onload = function(){goModal('Success','The citation was successfully submitted.', true)}</script>";
 	} elseif($_SESSION['CCmsg'] == "Field"){#Field has invalid characters
 		echo "<script type='text/javascript'> window.onload = function(){goModal('Symbol Error','Invalid symbols detected, make sure you are entering valid inputs.', true)}</script>";
 	} elseif($_SESSION['CCmsg'] == "Empty"){#Required field left empty
