@@ -120,7 +120,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <td><?php echo $row['operator']; ?></td>
                         <?php $op = $row['operator']; ?>
                         <?php if ($staff) {?> 
-							<td><form action="/manageUsers/editUsers" method="post">
+							<td><form action="/manageUsers/editUsers.php" method="post">
                                 <button type="submit" name="operator" value=<?php echo $op?> class="btn-link">Edit User</button>
                             </form></td>
 						    <?php } ?>
