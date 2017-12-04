@@ -10,8 +10,11 @@ if (!$staff || $staff->getRoleID() < 7){
 	exit();
 }
 if(isset($_POST['operator'])){
-	$receivedOperator = $_POST['operator'];
-}	
+	$thisUser = $_POST['operator'];
+}elseif(isset($_SESSION['operator'])){
+	$thisUser = $_SESSION['operator'];
+	unset($_SESSION['operator']);
+}
 /* Check for error from a previously submitted add user form.*/
 if(isset($_SESSION['popup'])){
     /* Handle appropriately*/
@@ -32,7 +35,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
 <div id="page-wrapper">
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Edit User <?php if(isset($receivedOperator)){$thisUser = $receivedOperator; echo $thisUser;}?></h1>
+        <h1 class="page-header">Edit User <?php if(isset($thisUser)){ echo $thisUser;}?></h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -48,27 +51,59 @@ else {echo "<!-- The pop up window value was not set. -->";}
             <div class="panel-heading">
                 <i class="fa fa-users fa-fw"></i> Edit User Information
             </div>
-            <form name="newUserForm" method= "POST"> <!--onsubmit="return insertNewUser();"-->
-
+            <form name="editUserForm" method= "POST">
+				<?php if (!isset($thisUser)){ ?>
+				<table class= "table table-striped">
+				    <tr>
+				        <td> ID of User to Edit </td>
+			            <td> <input type="text" class = "form-control" name="opToChange" placeholder="xxxxxxxxxx"></td>
+					</tr>
+				    <tr>
+                        <td><input class="btn btn-primary" type="submit" name="submitOperator" value="Continue">
+						<?php 
+						if(isset($_POST['submitOperator'])){
+							$opToChange = mysqli_real_escape_string($mysqli,$_POST['opToChange']);
+							$result = mysqli_query($mysqli, "SELECT `operator` FROM `users` WHERE `operator` = $opToChange");
+							if ($result->num_rows == 1){ 
+							    $_SESSION['operator']=$opToChange;
+                            }else{
+								$result = mysqli_query($mysqli, "SELECT `operator` FROM `offcampus` WHERE `operator` = $opToChange");
+                                if ($result->num_rows == 1){
+									$_SESSION['operator']=$opToChange;
+                                }  
+							    else{
+							 	    $_SESSION['popup']="User not found.";
+							    }
+							}
+							header("Location: ../manageUsers/editUsers.php");
+                            exit();
+						}
+						?>
+						</td>
+				    </tr>
+				</table>
+				<?php }else{ ?>
                 <table class="table table-striped">
                     <?php
                         $offcampus_user = FALSE;
                         $oncampus_user = FALSE;
-
-                        
-                        if (!($mysqli->query ("SELECT count(*) FROM `users` WHERE `operator` = '$thisUser'"))){
-                            $result = $mysqli->query ("SELECT * FROM `users` WHERE `operator` = '$thisUser'") or die("Bad Query: $result");  
-                            $oncampus_user = TRUE;  
-                        }
-                        else if (!($mysqli->query("SELECT count(*) FROM `offcampus` WHERE `operator` = '$thisUser'"))){
-                            $result = $mysqli->query ("SELECT * FROM `offcampus` WHERE `operator` = '$thisUser'") or die("Bad Query: $result");                              
-                            $offcampus_user = TRUE;       
-                        }  
-                        $row = mysqli_fetch_array($result);
+						
+                        $result = mysqli_query($mysqli, "SELECT * FROM `users` WHERE `operator` = $thisUser");
+					    if ($result->num_rows == 1){ 
+						    $oncampus_user = TRUE;
+							$row = mysqli_fetch_array($result);
+                        }else{
+							$result = mysqli_query($mysqli, "SELECT * FROM `offcampus` WHERE `operator` = $thisUser");
+                            if ($result->num_rows == 1){
+			    			    $offcampus_user = TRUE;
+								$row = mysqli_fetch_array($result);
+                            } 
+					    }
                     ?>
 
                 <tbody class="offCampus" id="offCampus" style="visibility:visible" >
-                    
+                    <?php 
+					if($offcampus_user){ ?>
                     <tr>
                         <td>First Name</td>
                         <td>
@@ -132,7 +167,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                             <input type="text" class = "form-control" name="zip" placeholder="xxxxx" value="<?php echo $row['zip'];?>">
                         </td>
                     </tr>
-
+                    <?php } ?>
                     </tbody>  
                     <tr>
                         <td>User ID</td>
@@ -145,7 +180,13 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <td>Icon</td>
                         <td>
                             <div class="form-group">
+							<?php
+							if(($row['r_id'] >= 7) && !(($row['icon'] == "user") || ($row['icon'] == NULL)))
+                                echo 'Preview: <i id="iconPreview" class="fa fa-' . $row['icon'] . ' fa-fw"></i>';
+						    else{
+							?>
                             <input type="text" class = "form-control" name="icon" placeholder="Icon" value="<?php echo $row['icon'];?>">
+							<?php } ?>
                         </td>
                     </tr>
 
@@ -181,115 +222,8 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         <?php
                         $error_message = "";
                         if (isset($_POST['submit'])){
-                            $num_updated = 0;
-                            if ($_POST['fname'] != $row['fname']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['fname']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['fname'];
-                            }
-                            if ($_POST['lname'] != $row['lname']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['lname']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['lname'];
-                            }
-                            if ($_POST['phone'] != $row['phone']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['phone']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['phone'];
-                            }
-                            if ($_POST['email'] != $row['email']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['email']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['email'];
-                            }
-                            if ($_POST['address'] != $row['address']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['address']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['address'];
-                            }
-                            if ($_POST['city'] != $row['city']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['city']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['city'];
-                            }
-                            if ($_POST['state'] != $row['state']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['state']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['state'];
-                            }
-                            if ($_POST['zip'] != $row['zip']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['zip']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['zip'];
-                            }
-
-                            if ($_POST['icon'] != $row['icon']){
-                                $icon = mysqli_real_escape_string($mysqli, $_POST['icon']);
-                                $num_updated += 1;
-                            }
-                            else{
-                                $icon = $row['icon'];
-                            }
-                            if ($_POST['notes'] != $row['notes']){
-                                $notes = mysqli_real_escape_string($mysqli, $_POST['notes']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $notes = $row['notes'];
-                            }
-                            if ($_POST['r_id'] != $row['r_id']){
-                                $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
-                                $num_updated += 1;                            
-                            }
-                            else{
-                                $r_id = $row['r_id'];
-                            }
-                            $adj_date = date("Y-m-d h:i:s", time());
-                            $_SESSION['popup'] = "";
-                            $input_error = false;
-    
-                            # Error handling
-                            if($num_updated == 0){
-                                $_SESSION['popup'] .= "You did not update anything.<br>";
-                                $input_error = true;
-                            }
-                            #Discuss other inputs with Jon, default expecting specific characters
-                            if(!preg_match("/^[a-zA-Z]*$/", $fname) || !preg_match("/^[a-zA-Z]*$/", $lname) || !preg_match("/^[0-9]*$/", $phone) 
-                            || !preg_match("/^[a-zA-Z-0-9]*$/", $email) || !preg_match("/^[a-zA-Z-0-9]*$/", $address) || !preg_match("/^[a-zA-Z]*$/", $city) 
-                            || !preg_match("/^[a-zA-Z]*$/", $state) || !preg_match("/^[0-9]*$/", $zip) || !preg_match("/^[a-zA-Z]*$/", $icon) 
-                            || !preg_match("/^[a-zA-Z-0-9]*$/", $notes) || !preg_match("/^[0-9]*$/", $r_id)){
-                                $_SESSION['popup'] .= "Invalid symbols detected, make sure you are entering valid inputs.<br>";
-                                $input_error = true;
-                            }
-                          
-                            # If there was no input error, then the query should be formatted correctly.
-                            // if(!$input_error && $oncampus_user && !$offcampus_user) {
-                            //     $sql = "UPDATE `fabapp-v0.9`.`users` SET `icon` = '$icon', `notes` = '$notes' , `adj_date` = '$adj_date' WHERE `users`.`operator` = '$thisUser'";
-                            //     mysqli_query($mysqli, $sql);                                
-                            //     $_SESSION['popup'] = "Success";
-                            // }
-                            else if (!$input_error && !$oncampus_user && $offcampus_user){
-                                $sql = "UPDATE `fabapp-v0.9`.`offcampus` SET `fname` = '$fname', `lname` = '$lname',`phone` = '$phone',`email` = '$email',`address` = '$address',`city` = '$city',
-                                `state` = '$state',`zip` = '$zip',`icon` = '$icon', `notes` = '$notes' , `adj_date` = '$adj_date' WHERE `offcampus`.`operator` = '$thisUser'";
-                                mysqli_query($mysqli, $sql);                                
-                                // $_SESSION['popup'] = "Success";
-                            }
+                            $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
+							$_SESSION['popup']=$r_id;
 
                             header("Location: ../manageUsers/editUser.php?");
                             exit();
@@ -298,6 +232,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                         </td>
                     </tr>
                 </table>
+				<?php } ?>
             </form>
         </div>
     </div>
