@@ -90,8 +90,10 @@ else {echo "<!-- The pop up window value was not set. -->";}
                             </td>
                             <td>
                                 <?php
-                                    if(($row['r_id'] >= 7) && !(($row['icon'] == "user") || ($row['icon'] == NULL)))
-                                    echo 'Preview: <i id="iconPreview" class="fa fa-' . $row['icon'] . ' fa-fw"></i>';
+                                    if($row['r_id'] < 7)
+                                        echo '<i id="iconPreview" class="fa fa-user fa-fw"></i>';
+                                    else if($row['icon'] != "user")
+                                        echo '<i id="iconPreview" class="fa fa-' . $row['icon'] . ' fa-fw"></i>';
                                     else
                                     {
                                         $currentDirectory = getcwd();
@@ -217,7 +219,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                 </form>
             </div>
         </div>
-        
+
         <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">

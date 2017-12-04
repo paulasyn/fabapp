@@ -316,7 +316,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (is_object($staff) && $staff->getRoleID() < 6)  { 
  ?>
                         <li>
-                            <a href="/manageUsers/myProfile.php"><i class="fa fa-<i class="fa fa-<?php echo $staff->getIcon();?>  fa-fw"></i> View My Profile</a>
+                            <a href="/manageUsers/myProfile.php"><i class="fa fa-user fa-fw"></i> View My Profile</a>
                         </li>
 
 <?php } ?>
