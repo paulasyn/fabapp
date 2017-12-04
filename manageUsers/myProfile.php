@@ -201,12 +201,18 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                             $input_error = true;
                                         }
                                       
+                                        
                                         # If there was no input error, then the query should be formatted correctly.
-                                        if(!$input_error) {
+                                        else if(!$input_error && $oncampus == 0) {
+                                            $sql = "UPDATE `fabapp-v0.9`.`offcampus` SET `icon` = '$icon', `notes` = '$notes' , `adj_date` = '$adj_date' WHERE `offcampus`.`operator` = '$thisUser'";
+                                            mysqli_query($mysqli, $sql);                                
+                                            $_SESSION['popup'] = "Success";   
+                                        }
+
+                                        else if(!$input_error && $oncampus == 1) {
                                             $sql = "UPDATE `fabapp-v0.9`.`users` SET `icon` = '$icon', `notes` = '$notes' , `adj_date` = '$adj_date' WHERE `users`.`operator` = '$thisUser'";
                                             mysqli_query($mysqli, $sql);                                
-                                            $_SESSION['popup'] = "Success";
-                                            
+                                            $_SESSION['popup'] = "Success";   
                                         }
 
                                         header("Location: ../manageUsers/myProfile.php");
