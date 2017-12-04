@@ -137,6 +137,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                             </td>
                         </tr>
 
+                        <?php if($row['r_id'] >= 7) { ?>
                         <tr>
                             <td>Notes</td>
                             <td>
@@ -147,21 +148,14 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                 <input type="text" class = "form-control" name="notes" placeholder="Add Notes" id="notesInput" disabled>
                             </td>
                         </tr>
+                        <?php } ?>
 
                      
                       
                         <tr>
                             <td>Role ID</td>
                             <td>
-                                <?php
-                                    if($row['r_id'] < 7)
-                                        echo $row['r_id'];
-                                    else
-                                    {
-                                        echo '<div class="form-group">';
-                                        echo '<input type="int" class = "form-control" name="r_id" placeholder="Enter Role ID" value="' . $row['r_id'] . '" id="roleIDinput" disabled>';
-                                    }
-                                ?>
+                                <?php echo $row['r_id']; ?>
                             </td>
                         </tr>
                         
@@ -195,13 +189,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                         else{
                                             $notes = $row['notes'];
                                         }
-                                        if ($_POST['r_id'] != $row['r_id'] && $_POST['r_id'] != ""){
-                                            $r_id = mysqli_real_escape_string($mysqli, $_POST['r_id']);
-                                            $num_updated += 1;                            
-                                        }
-                                        else{
-                                            $r_id = $row['r_id'];
-                                        }
+
                                         $adj_date = date("Y-m-d h:i:s", time());
                                         $_SESSION['popup'] = "";
                                         $input_error = false;
@@ -212,7 +200,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                             $input_error = true;
                                         }
                                         #Discuss other inputs with Jon, default expecting specific characters
-                                        if(!preg_match("/^[0-9]*$/", $r_id) || !preg_match("/^[[:alpha:]](-|[[:alpha:]])*[[:alpha:]]$/", $icon)){
+                                        if(!preg_match("/^[[:alpha:]](-|[[:alpha:]])*[[:alpha:]]$/", $icon)){
                                             $_SESSION['popup'] .= "Invalid symbols detected, make sure you are entering valid inputs.<br>" . "Role:" . $r_id . ", Icon:" . $icon;
                                             $input_error = true;
                                         }
@@ -225,7 +213,7 @@ else {echo "<!-- The pop up window value was not set. -->";}
                                             
                                         }
 
-                                        header("Location: ../manageUsers/viewEditMyAdminProfile.php");
+                                        header("Location: ../manageUsers/myProfile.php");
                                         exit();
                                     }
                                 ?>
