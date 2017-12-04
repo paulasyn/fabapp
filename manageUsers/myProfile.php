@@ -230,15 +230,16 @@ else {echo "<!-- The pop up window value was not set. -->";}
             </form>
         </div>
 
+
         <?php
             $result = $mysqli->query ("SELECT trainingmodule.title, trainingmodule.tm_desc, tm_enroll.completed FROM tm_enroll INNER JOIN trainingmodule ON tm_enroll.tm_id = trainingmodule.tm_id WHERE tm_enroll.operator = " . $thisUser) or die("Bad Query: $result");
             if(mysqli_num_rows($result) == 0)
-                goto trainingEnd;
+                goto certificatesEnd;
         ?>
         
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-list-alt fa-fw"></i> Training Certificates
+                <i class="fa fa-vcard-o fa-fw"></i> Training Certificates
             </div>
             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <thread>
@@ -260,7 +261,45 @@ else {echo "<!-- The pop up window value was not set. -->";}
                 ?>
             </table>
         </div>
-        <?php trainingEnd: ?>
+        <?php certificatesEnd: ?>
+
+
+        <?php
+            $result = $mysqli->query ("SELECT tm_enroll.operator, trainingmodule.title, trainingmodule.tm_desc FROM tm_enroll RIGHT JOIN trainingmodule ON tm_enroll.tm_id = trainingmodule.tm_id AND tm_enroll.operator = " . $thisUser) or die("Bad Query: $result");
+            if(mysqli_num_rows($result) == 0)
+                goto availableTrainingEnd;
+        ?>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list-alt fa-fw"></i> Available Training
+            </div>
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thread>
+                    <tr>
+                        <th>Training Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thread>
+                <?php
+                     while ($availableTraining = mysqli_fetch_array($result))
+                    {
+                        /*foreach ($availableTraining as $key => $value)
+                        {
+                            echo "<tr><td>Key: " . $key . ", Value: " . $value . "</td></tr>";
+                        }*/
+                        if(strcasecmp($availableTraining['operator'], $thisUser) == 0)
+                            continue;
+
+                        echo "<tr>";
+                            echo "<td>" . $availableTraining['title'] . "</td>";
+                            echo "<td>" . $availableTraining['tm_desc'] . "</td>";
+                        echo "</tr>";
+                    }
+                ?>
+            </table>
+        </div>
+        <?php availableTrainingEnd: ?>
     </div>
    
         <!-- /.col-md-4 -->
